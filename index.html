@@ -1,0 +1,1909 @@
+<!doctype html><html lang="kk"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>Вектордың ұзындығы. Арақашықтық</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400;1,8..60,600&display=swap">
+<style>
+/* Layout: school-notebook sheet on graph paper. Sticky header, pill tabs, one card per topic
+   (text left, rotatable 3D figure right), reference grid, floating pen toolbar over an ink layer. */
+:root{
+  --u:1.25; --k:1.15; --ul:1.12;
+  --paper:#f6f8fd; --grid:#dde5f4; --surface:#ffffff; --surface-2:#eef3fc;
+  --ink:#142040; --ink-2:#4b5979; --rule:#ccd6ea;
+  --accent:#2447c5; --accent-ink:#ffffff; --accent-soft:rgba(36,71,197,.12);
+  --margin:#d63e4f;
+  --plane-a:rgba(36,71,197,.17); --edge-a:#2447c5;
+  --plane-b:rgba(214,62,79,.17); --edge-b:#d63e4f;
+  --plane-c:rgba(17,122,85,.17); --edge-c:#117a55;
+  --good:#117a55; --good-soft:rgba(17,122,85,.12); --bad:#c2303f; --bad-soft:rgba(194,48,63,.11);
+  --pen-1:#1b3fd0; --pen-2:#d3263f; --pen-3:#0f8a5f;
+  --font-display:'Source Serif 4','Noto Serif',Georgia,serif;
+  --font-ui:'IBM Plex Sans','Noto Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#061a19; --grid:#0d2d2b; --surface:#0b2523; --surface-2:#10312f;
+    --ink:#e8f8f4; --ink-2:#a8d0c9; --rule:#2a5a56;
+    --accent:#4de3c2; --accent-ink:#03211d; --accent-soft:rgba(77,227,194,.17);
+    --margin:#ff9ba6;
+    --plane-a:rgba(79,216,232,.22); --edge-a:#52dcec;
+    --plane-b:rgba(255,155,166,.22); --edge-b:#ff9ba6;
+    --plane-c:rgba(166,232,107,.22); --edge-c:#a9e86d;
+    --good:#6ee7a8; --good-soft:rgba(110,231,168,.16); --bad:#ff9ba6; --bad-soft:rgba(255,155,166,.15);
+    --pen-1:#62e4f2; --pen-2:#ff9ba6; --pen-3:#b2ee78;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#061a19; --grid:#0d2d2b; --surface:#0b2523; --surface-2:#10312f;
+    --ink:#e8f8f4; --ink-2:#a8d0c9; --rule:#2a5a56;
+    --accent:#4de3c2; --accent-ink:#03211d; --accent-soft:rgba(77,227,194,.17);
+    --margin:#ff9ba6;
+    --plane-a:rgba(79,216,232,.22); --edge-a:#52dcec;
+    --plane-b:rgba(255,155,166,.22); --edge-b:#ff9ba6;
+    --plane-c:rgba(166,232,107,.22); --edge-c:#a9e86d;
+    --good:#6ee7a8; --good-soft:rgba(110,231,168,.16); --bad:#ff9ba6; --bad-soft:rgba(255,155,166,.15);
+    --pen-1:#62e4f2; --pen-2:#ff9ba6; --pen-3:#b2ee78;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{
+  background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:24px 24px;
+  color:var(--ink); font:400 calc(16px*var(--u))/1.5 var(--font-ui); -webkit-text-size-adjust:100%;
+}
+button,input{font-family:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{width:100%;max-width:calc(1080px*var(--u));margin-inline:auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.app{padding-block:0 110px}
+
+/* header */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:var(--paper);border-bottom:1px solid var(--rule)}
+.top-in{flex-wrap:wrap;display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:10px}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.brand svg{flex:none}
+.brand-txt{min-width:0}
+.brand-t{font:600 calc(21px*var(--ul))/1.1 var(--font-display);letter-spacing:-.01em;white-space:nowrap}
+.brand-s{font-size:calc(12.5px*var(--u));color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ctrl{flex-wrap:wrap;display:flex;align-items:center;gap:8px;flex:none}
+.seg{display:inline-flex;border:1px solid var(--rule);border-radius:10px;overflow:hidden;background:var(--surface)}
+.seg button{border:0;background:transparent;color:var(--ink-2);font:600 calc(13px*var(--u)) var(--font-ui);padding:0 11px;min-height:calc(38px*var(--k));cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+.icon-btn{width:calc(38px*var(--k));height:calc(38px*var(--k));display:grid;place-items:center;border:1px solid var(--rule);border-radius:10px;background:var(--surface);color:var(--ink);cursor:pointer}
+.icon-btn svg,.tool svg{display:block}
+
+/* tabs */
+.tabs{display:flex;gap:8px;padding-block:14px 4px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:none;border:1px solid var(--rule);background:var(--surface);color:var(--ink-2);font:600 calc(15px*var(--u)) var(--font-ui);padding:0 16px;min-height:calc(42px*var(--k));border-radius:999px;cursor:pointer;white-space:nowrap}
+.tab[aria-selected="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+
+/* sheet */
+.sheet{position:relative}
+.stack{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;padding-block:12px 24px}
+.intro{margin:6px 0 0;max-width:64ch;color:var(--ink-2);font-size:calc(15.5px*var(--u))}
+.src-note{margin:0;font-size:calc(12.5px*var(--u));color:var(--ink-2)}
+.legend{background:var(--surface);border:1px solid var(--rule);border-radius:12px;padding:0 14px}
+.legend summary{cursor:pointer;font-weight:600;min-height:calc(46px*var(--k));display:flex;align-items:center}
+.legend-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:8px 18px;padding:2px 0 14px;margin:0;list-style:none}
+.legend-g li{display:flex;gap:10px;align-items:baseline;min-width:0}
+.legend-g b{font:italic 600 calc(17px*var(--u)) var(--font-display);white-space:nowrap;min-width:5.4em}
+.legend-g span{font-size:calc(14px*var(--u));color:var(--ink-2)}
+
+.card{background:var(--surface);border:1px solid var(--rule);border-radius:16px;padding:18px;display:grid;grid-template-columns:minmax(0,1fr);gap:18px}
+@media (min-width:820px){.card{grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);padding:24px;gap:30px}}
+.c-text{display:flex;flex-direction:column;gap:14px;min-width:0}
+.c-head{display:flex;align-items:center;gap:10px}
+.tag{flex:none;background:var(--accent);color:var(--accent-ink);font:700 calc(14px*var(--u)) var(--font-ui);letter-spacing:.03em;padding:4px 10px;border-radius:8px;white-space:nowrap}
+.c-head h2{margin:0;font:600 calc(22px*var(--u))/1.2 var(--font-display);text-wrap:balance}
+.stmt{margin:0;font:400 calc(19px*var(--u))/1.5 var(--font-display);max-width:58ch}
+.defs{margin:0;padding-left:1.2em;display:grid;gap:4px;font-size:calc(15px*var(--u));color:var(--ink-2);max-width:60ch}
+.sym{margin:0;background:var(--surface-2);border-radius:10px;padding:10px 12px;font:italic 400 calc(17px*var(--u))/1.5 var(--font-display);overflow-wrap:anywhere}
+.sym small{display:block;font:600 calc(11px*var(--u)) var(--font-ui);font-style:normal;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-2);margin-bottom:2px}
+.real{border-top:1px dashed var(--rule);padding-top:12px}
+.real small{font:600 calc(11px*var(--u)) var(--font-ui);letter-spacing:.09em;text-transform:uppercase;color:var(--margin)}
+.real p{margin:2px 0 0;font-size:calc(15px*var(--u));color:var(--ink-2);max-width:58ch}
+.extra{margin:0;border-top:1px dashed var(--rule);padding-top:12px;font-size:calc(15px*var(--u));max-width:60ch}
+.extra b{font-weight:600}
+.proof{border-top:1px dashed var(--rule);padding-top:4px}
+.proof summary{cursor:pointer;font-weight:600;min-height:calc(44px*var(--k));display:flex;align-items:center}
+.proof ol{margin:0;padding-left:1.3em;display:grid;gap:8px;font-size:calc(15.5px*var(--u));max-width:60ch}
+.proof li::marker{font-weight:600;color:var(--ink-2)}
+.ref{display:inline-block;font:700 calc(12px*var(--u)) var(--font-ui);background:var(--accent-soft);color:var(--accent);border-radius:6px;padding:0 6px;margin-left:4px;white-space:nowrap}
+
+/* figure */
+.c-fig{min-width:0}
+.fig{margin:0;background:var(--surface-2);border:1px solid var(--rule);border-radius:12px;overflow:hidden}
+.fig svg{display:block;width:100%;height:auto;touch-action:pan-y;cursor:grab;user-select:none;-webkit-user-select:none}
+.fig svg.grab{cursor:grabbing}
+.fig figcaption{padding:10px 14px;border-top:1px solid var(--rule);font-size:calc(14.5px*var(--u));line-height:1.45;color:var(--ink-2);min-height:5.2em}
+.counts{display:flex;gap:8px;margin-top:10px}
+.count{flex:1;min-width:0;background:var(--surface-2);border:1px solid var(--rule);border-radius:10px;padding:6px 10px;display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+.count span{font-size:calc(12.5px*var(--u));color:var(--ink-2);min-width:0;overflow-wrap:anywhere}
+.count b{font:600 calc(22px*var(--u)) var(--font-display);font-variant-numeric:tabular-nums}
+.modes{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.mode{border:1px solid var(--rule);background:var(--surface);color:var(--ink-2);font:600 calc(13.5px*var(--u)) var(--font-ui);border-radius:999px;padding:0 14px;min-height:calc(38px*var(--k));cursor:pointer}
+.mode[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+.slider{display:flex;align-items:center;gap:12px;margin-top:10px;font-weight:600;font-size:calc(14px*var(--u))}
+.slider span{white-space:nowrap;min-width:4.2em;font-variant-numeric:tabular-nums}
+.slider input{flex:1;min-width:0;accent-color:var(--accent);min-height:calc(30px*var(--k))}
+.fig-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:6px;font-size:calc(12.5px*var(--u));color:var(--ink-2)}
+.link-btn{border:0;background:transparent;color:var(--accent);font:600 calc(13px*var(--u)) var(--font-ui);cursor:pointer;min-height:calc(36px*var(--k));padding:0 4px}
+.pl-a{fill:var(--plane-a);stroke:var(--edge-a);stroke-width:1.5;stroke-linejoin:round}
+.pl-b{fill:var(--plane-b);stroke:var(--edge-b);stroke-width:1.5;stroke-linejoin:round}
+.pl-c{fill:var(--plane-c);stroke:var(--edge-c);stroke-width:1.5;stroke-linejoin:round}
+.pl-f{fill:var(--plane-a);stroke:none}
+.ln{fill:none;stroke-linecap:round}
+.ln-ink{stroke:var(--ink)} .ln-accent{stroke:var(--accent)} .ln-faint{stroke:var(--ink-2)}
+.pt{fill:var(--ink);stroke:var(--surface-2);stroke-width:2}
+.lbl{font:italic 600 calc(18px*var(--ul)) var(--font-display);fill:var(--ink);text-anchor:middle;dominant-baseline:middle;paint-order:stroke;stroke:var(--surface-2);stroke-width:3px}
+.lbl-h{fill:var(--ink-2)}
+.lbl-a{fill:var(--edge-a)} .lbl-b{fill:var(--edge-b)} .lbl-c{fill:var(--edge-c)} .lbl-ln{fill:var(--accent)}
+.lbl-pl{font-size:calc(21px*var(--ul))}
+
+/* reference */
+.ref-tools{display:grid;gap:10px}
+.search{width:100%;min-height:calc(46px*var(--k));border:1px solid var(--rule);border-radius:12px;background:var(--surface);color:var(--ink);font:500 calc(16px*var(--u)) var(--font-ui);padding:0 14px}
+.search::placeholder{color:var(--ink-2)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.rgroup{display:grid;gap:10px}
+.rgroup h3{margin:6px 0 0;font:600 calc(13px*var(--u)) var(--font-ui);letter-spacing:.09em;text-transform:uppercase;color:var(--ink-2)}
+.ref-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px}
+.rc{background:var(--surface);border:1px solid var(--rule);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.rc-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.symbtn{border:1px solid var(--rule);background:var(--surface-2);color:var(--ink);border-radius:10px;padding:4px 12px;min-height:calc(44px*var(--k));max-width:100%;font:italic 600 calc(24px*var(--u))/1.2 var(--font-display);cursor:pointer;text-align:left;overflow-wrap:anywhere}
+.symbtn:hover{border-color:var(--accent)}
+.rc-term{font:600 calc(20px*var(--u))/1.25 var(--font-display)}
+.rc-src{flex:none;font:700 calc(12px*var(--u)) var(--font-ui);color:var(--ink-2);background:var(--surface-2);border-radius:6px;padding:2px 7px;white-space:nowrap}
+.rc-txt{margin:0;font-size:calc(15px*var(--u))}
+.rc-ex{margin:0;font:italic calc(15.5px*var(--u)) var(--font-display);color:var(--ink-2);overflow-wrap:anywhere}
+.rc-alt{margin:0;font-size:calc(13.5px*var(--u));color:var(--ink-2)}
+.empty{padding:28px 12px;text-align:center;color:var(--ink-2)}
+
+/* quiz */
+.quiz{max-width:720px;grid-template-columns:minmax(0,1fr)!important;gap:16px}
+.prog{display:flex;gap:4px}
+.prog i{flex:1;height:6px;border-radius:3px;background:var(--rule)}
+.prog i.on{background:var(--accent)}
+.q-n{font-size:calc(13px*var(--u));color:var(--ink-2);font-weight:600}
+.q-t{margin:0;font:600 calc(21px*var(--ul))/1.35 var(--font-display);text-wrap:balance}
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:12px;align-items:flex-start;text-align:left;width:100%;padding:12px 14px;border:1px solid var(--rule);border-radius:12px;background:var(--surface);color:var(--ink);font:500 calc(16px*var(--u))/1.4 var(--font-ui);cursor:pointer;min-height:calc(50px*var(--k))}
+.opt .k{flex:none;width:24px;height:24px;border-radius:50%;border:1px solid var(--rule);display:grid;place-items:center;font-size:calc(12px*var(--u));font-weight:700;color:var(--ink-2)}
+.opt.ok{border-color:var(--good);background:var(--good-soft)}
+.opt.bad{border-color:var(--bad);background:var(--bad-soft)}
+.opt[disabled]{cursor:default}
+.fb{margin:0;padding:12px 14px;border-radius:12px;background:var(--surface-2);font-size:calc(15px*var(--u))}
+.fb b.ok{color:var(--good)} .fb b.bad{color:var(--bad)}
+.btn{align-self:flex-start;border:0;background:var(--accent);color:var(--accent-ink);font:600 calc(15px*var(--u)) var(--font-ui);padding:0 20px;min-height:calc(46px*var(--k));border-radius:12px;cursor:pointer}
+.score{font:600 calc(40px*var(--u))/1 var(--font-display)}
+
+/* pen */
+#ink{position:absolute;left:0;top:0;z-index:5;pointer-events:none}
+body[data-tool="pen"] #ink,body[data-tool="line"] #ink,body[data-tool="eraser"] #ink{pointer-events:auto;touch-action:none;cursor:crosshair}
+body[data-tool="eraser"] #ink{cursor:cell}
+.pen{position:fixed;left:0;right:0;bottom:0;z-index:40;display:flex;justify-content:center;pointer-events:none;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-bottom:calc(10px + env(safe-area-inset-bottom,0px))}
+.pen-bar{pointer-events:auto;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:4px;padding:6px;background:var(--surface);border:1px solid var(--rule);border-radius:16px;box-shadow:0 8px 28px rgba(8,16,40,.22)}
+.tool{width:calc(38px*var(--k));height:calc(38px*var(--k));display:grid;place-items:center;border:1px solid transparent;border-radius:10px;background:transparent;color:var(--ink);cursor:pointer;padding:0}
+.tool[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+.tool.armed{background:var(--bad);color:#fff}
+.tool .dot{display:block;border-radius:50%;background:currentColor}
+.tool.sw .dot{width:20px;height:20px}
+.tool.sw[aria-pressed="true"]{background:transparent;border-color:var(--ink)}
+.sep{width:1px;height:24px;background:var(--rule);margin:0 3px}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(76px + env(safe-area-inset-bottom,0px));z-index:45;max-width:min(92vw,420px);background:var(--ink);color:var(--paper);padding:10px 14px;border-radius:12px;font-size:calc(14px*var(--u));line-height:1.35;text-align:center;pointer-events:none}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+
+.ang-f{fill:var(--plane-b);stroke:none}
+.ang-s{fill:none;stroke:var(--edge-b);stroke-width:1.9;stroke-linejoin:round;stroke-linecap:round}
+.ln-b{stroke:var(--edge-b)} .ln-c{stroke:var(--edge-c)}
+.lbl-ang{font-size:calc(17px*var(--ul))}
+.brand-t{white-space:normal}
+.legend-g{grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr))}
+.legend-g b{min-width:0;white-space:normal;flex:none;max-width:45%}
+.tab{max-width:calc(100vw - 32px);white-space:normal;line-height:1.25;padding-block:6px}
+.brand-t,.brand-s,.c-head h2,.c-text,.stmt,.defs li,.sym{min-width:0;overflow-wrap:break-word;hyphens:auto}
+
+.ln-a{stroke:var(--edge-a)}
+.sol-f{display:flex;flex-direction:column;gap:6px;margin-bottom:14px;min-width:0}
+.sol-f>label,.sol-o legend{font-weight:700;font-size:calc(calc(14px*var(--u))*var(--u));color:var(--ink-2)}
+.sol select,.sol input[type=number]{width:100%;min-width:0;min-height:calc(44px*var(--k));border:1px solid var(--rule);border-radius:12px;background:var(--surface);color:var(--ink);font:500 calc(calc(16px*var(--u))*var(--u)) var(--font-ui);padding:0 12px}
+.sol select:focus-visible,.sol input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.sol input[aria-invalid="true"]{border-color:var(--edge-b)}
+.sol-par{display:flex;flex-wrap:wrap;gap:10px}
+.sol-n span{white-space:nowrap}.sol select{font-size:calc(calc(14.5px*var(--u))*var(--u))}
+.sol-n{display:flex;align-items:center;gap:8px;flex:1 1 130px;min-width:0;font-weight:700;font-size:calc(calc(15px*var(--u))*var(--u))}
+.sol-hint{color:var(--ink-2);font-size:calc(calc(13px*var(--u))*var(--u));overflow-wrap:anywhere}
+.sol-objs{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:14px}
+.sol-o{flex:1 1 200px;min-width:0;border:1px solid var(--rule);border-radius:12px;padding:8px 12px 12px;display:flex;flex-direction:column;gap:8px}
+.sol-v{display:flex;flex-direction:column;gap:4px;font-size:calc(calc(13px*var(--u))*var(--u));color:var(--ink-2)}
+.sol-ans{display:flex;flex-direction:column;gap:8px;border:1px solid var(--accent);background:var(--accent-soft);border-radius:14px;padding:12px 14px;margin:6px 0 12px}
+.sol-ans small{font-weight:700;color:var(--accent);font-size:calc(calc(13px*var(--u))*var(--u))}
+.sol-res{display:flex;flex-direction:column;gap:2px;min-width:0}
+.sol-res .k{color:var(--ink-2);font-size:calc(calc(14px*var(--u))*var(--u))}
+.sol-res b{font-size:calc(calc(18px*var(--u))*var(--u));overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
+.sol-res.main b{font-size:calc(calc(24px*var(--u))*var(--u))}
+.sol .proof li{overflow-wrap:anywhere}
+.card.sol{grid-template-columns:minmax(0,1fr)}@media(min-width:820px){.card.sol{grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-areas:'ctl fig' 'zone fig';align-items:start}.card.sol>.c-text{grid-area:ctl}.card.sol>.c-fig{grid-area:fig;position:sticky;top:90px}.card.sol>.sol-zone{grid-area:zone}}@media(min-width:1180px){.card.sol{grid-template-columns:minmax(0,.9fr) minmax(0,1fr) minmax(0,1.1fr);grid-template-areas:'ctl fig zone';gap:22px}.sol-zone{position:sticky;top:96px}}.sol-zone{min-width:0;display:flex;flex-direction:column;gap:14px;max-height:calc(100vh - 130px);overflow:auto;overscroll-behavior:contain}.sol-zone .work{margin-top:0;min-height:calc(420px*var(--k));flex:1 0 auto}.work{margin-top:16px;min-height:calc(220px*var(--k));border:2px dashed var(--rule);border-radius:14px;padding:8px 12px}.work small{color:var(--ink-2);font-weight:600}
+.sol-o{flex-direction:row;flex-wrap:wrap}.sol-o legend{flex:none}.sol-v{flex:1 1 90px;min-width:0}
+.mt{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}.mt-col{display:flex;flex-direction:column;gap:10px;min-width:0}
+.mt-c{position:relative;display:flex;align-items:center;gap:8px;min-width:0;text-align:left;min-height:calc(56px*var(--k));padding:8px 10px;border:1.5px solid var(--rule);border-radius:12px;background:var(--surface);color:var(--ink);font:500 calc(15px*var(--u)) var(--font-ui);cursor:pointer}
+.mt-c:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.mt-c.sel{border-color:var(--accent);background:var(--accent-soft);box-shadow:0 0 0 2px var(--accent)}
+.mt-c.got{border-color:var(--accent)}
+.mt-c.ok{border-color:var(--edge-c);background:var(--plane-c)}.mt-c.bad{border-color:var(--edge-b);background:var(--plane-b)}
+.mt-n{flex:none;display:grid;place-items:center;width:1.8em;height:1.8em;border-radius:50%;background:var(--accent-soft);color:var(--accent);font-weight:800}
+.mt-t{flex:1 1 auto;min-width:0;overflow-wrap:anywhere}
+.mt-b{flex:none;min-width:1.4em;text-align:center;font-weight:800;color:var(--accent)}
+.mt-m{flex:none;font-style:normal;font-weight:800}
+.m-act{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.btn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--rule)}
+.card.match{display:block}
+.m-head{display:flex;align-items:center;justify-content:space-between;gap:12px}.m-head h2{margin:0;font-size:calc(22px*var(--u))}
+.m-cnt{flex:none;padding:4px 12px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-weight:800;font-size:calc(15px*var(--u))}
+.m-help{margin:8px 0 0;color:var(--ink-2);font-size:calc(15px*var(--u))}.card.match .mt{margin-top:14px}
+.m-task{margin-top:14px;border:1px solid var(--rule);border-left:4px solid var(--accent);border-radius:12px;padding:10px 14px;background:var(--surface)}
+.m-task small{color:var(--accent);font-weight:700}.m-task p{margin:4px 0 0;font-size:calc(17px*var(--u));overflow-wrap:anywhere}
+.intro{max-width:none}
+
+.mt-c.img{min-height:calc(130px*var(--k))}
+.mt-img{flex:1 1 auto;min-width:0;display:block}
+.mt-img svg{display:block;width:100%;max-height:calc(150px*var(--k));height:auto}
+.mt-img .lbl{font-size:22px}
+.mt-img .ln{stroke-width:2.2px}.mt-img .ln-accent{stroke-width:3.4px}
+.mt-img .pt{r:3.5px;stroke-width:1.5px}
+.mt-img .ang-s{stroke-width:2.5px}
+.mt-img .pl-a,.mt-img .pl-b,.mt-img .pl-c{stroke-width:4px}
+.mt-img .ln[stroke-dasharray]{stroke-dasharray:6 6;stroke-width:1.6px}
+
+.mt-c.img{flex-wrap:wrap;align-items:flex-start;row-gap:2px}
+.mt-c.img .mt-n,.mt-c.img .mt-b,.mt-c.img .mt-m{order:1}
+.mt-c.img .mt-n{margin-right:auto}
+.mt-c.img .mt-t{order:3;flex:0 0 100%}
+.mt-c.img{min-height:0}
+.mt-img svg{max-height:calc(190px*var(--k))}
+
+.mt.has-img{grid-template-columns:minmax(0,1fr)}.m-head{flex-wrap:wrap}.m-head h2{min-width:0;overflow-wrap:anywhere}
+.mt.has-img .mt-col{display:grid;grid-template-columns:repeat(auto-fit,minmax(calc(150px*var(--k)),1fr));gap:10px}
+.mt.has-img .mt-col:first-child .mt-c{align-content:start}
+.mt.has-img .mt-col:last-child .mt-c{min-height:calc(56px*var(--k))}
+@media(max-width:560px){.mt.has-img .mt-col{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.ah{stroke:none}.ah-ink{fill:var(--ink)}.ah-accent{fill:var(--accent)}.ah-faint{fill:var(--ink-2)}.ah-a{fill:var(--edge-a)}.ah-b{fill:var(--edge-b)}.ah-c{fill:var(--edge-c)}
+/* ===== polish: teal-green dark palette, larger text, clearer buttons, smooth effects ===== */
+body{line-height:1.6;font-size:calc(17px*var(--u))}
+.stmt{font-size:calc(18px*var(--u))}
+.tab,.mode,.btn,.seg button,.link-btn,.tool,.mt-c,.opt,.icon-btn,.sol-in,select{transition:background-color .22s ease,color .22s ease,border-color .22s ease,box-shadow .22s ease,transform .18s ease,filter .2s ease}
+.tab{border-width:1.5px;font-weight:700;min-height:calc(46px*var(--k))}
+.tab:hover,.mode:hover,.mt-c:hover,.opt:not([disabled]):hover{border-color:var(--accent);color:var(--ink);transform:translateY(-1px);box-shadow:0 6px 16px rgba(0,0,0,.14)}
+.tab[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);box-shadow:0 4px 14px rgba(0,0,0,.18)}
+.mode{border-width:1.5px;min-height:calc(42px*var(--k))}
+.mode[aria-pressed="true"]{box-shadow:inset 0 0 0 1px var(--accent)}
+.btn{font-weight:700;min-height:calc(52px*var(--k));padding:0 26px;box-shadow:0 2px 0 rgba(0,0,0,.2),0 8px 20px rgba(0,0,0,.14)}
+.btn:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.btn:active,.tab:active,.mode:active,.mt-c:active{transform:translateY(1px);filter:none;box-shadow:none}
+.btn.ghost{box-shadow:none;border-width:2px}
+.btn.ghost:hover{border-color:var(--accent);background:var(--accent-soft)}
+.link-btn{font-weight:700;text-decoration:underline;text-underline-offset:3px}
+.seg button{min-height:calc(42px*var(--k))}
+.seg button:hover:not([aria-pressed="true"]){background:var(--accent-soft);color:var(--ink)}
+.card{transition:box-shadow .28s ease,border-color .28s ease}
+.card:hover{box-shadow:0 12px 34px rgba(0,0,0,.16);border-color:var(--accent)}
+.sol-in:focus,select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+:root[data-theme="dark"] .top{background:linear-gradient(180deg,#0a2b29,var(--paper))}
+</style>
+
+<div class="app">
+  <header class="top">
+    <div class="wrap top-in">
+      <div class="brand">
+        <svg width="36" height="36" viewBox="0 0 36 36" aria-hidden="true">
+          <path d="M3 25l9-12h21l-9 12z" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1.6" stroke-linejoin="round"/>
+          <path d="M18 3v31" stroke="var(--ink)" stroke-width="1.8" stroke-linecap="round"/>
+          <circle cx="18" cy="19" r="2.6" fill="var(--ink)"/>
+        </svg>
+        <div class="brand-txt"><div class="brand-t" id="bt"></div><div class="brand-s" id="bs"></div></div>
+      </div>
+      <div class="ctrl">
+        <div class="seg" role="group" aria-label="Язык / Тіл">
+          <button type="button" data-lang="ru" aria-pressed="true">РУС</button>
+          <button type="button" data-lang="kk" aria-pressed="false">ҚАЗ</button>
+        </div>
+        <div class="seg" id="sizeSeg" role="group"><button type="button" data-size="0">А</button><button type="button" data-size="1">А+</button><button type="button" data-size="2">А++</button></div>
+        <button type="button" class="icon-btn" id="themeBtn" data-act="theme"></button>
+      </div>
+    </div>
+  </header>
+  <div class="wrap"><nav class="tabs" id="tabs" role="tablist"></nav></div>
+  <div class="wrap">
+    <main class="sheet" id="sheet">
+      <div id="view"></div>
+      <canvas id="ink" aria-hidden="true"></canvas>
+    </main>
+  </div>
+</div>
+<div class="pen" id="penWrap"></div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+(function(){
+'use strict';
+var $=function(s,r){return (r||document).querySelector(s)};
+var $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
+var LS={
+  get:function(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},
+  set:function(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+};
+var D=Math.PI/180, SUB='₁';
+
+/* ---------- UI strings ---------- */
+var T={
+ru:{sizeGroup:'Размер текста',sizeNames:['Обычный текст','Крупный текст','Очень крупный текст'],title:'Длина вектора. Расстояние между точками',sub:'Тема 11.2 · длина вектора, расстояние, середина отрезка, решатель',
+ tabs:{len:'Длина вектора',dist:'Расстояние между точками',mid:'Середина отрезка',sol:'Задачи',ref:'Справочник',qz:'Тест'},
+ intro:{
+  len:'Тема 11.2, §23. Длина вектора a(x; y; z) равна √(x² + y² + z²): это длина диагонали прямоугольного параллелепипеда с рёбрами |x|, |y|, |z|. Поворачивайте чертёж и двигайте ползунок.',
+  dist:'Тема 11.2, §22. Расстояние между точками A₁(x₁; y₁; z₁) и A₂(x₂; y₂; z₂) равно длине вектора A₁A₂. Формула получается двукратным применением теоремы Пифагора.',
+  mid:'Тема 11.2, §21. Каждая координата середины отрезка равна среднему арифметическому соответствующих координат его концов. Формула помогает находить середину, второй конец отрезка и центр параллелепипеда.',
+  sol:'Решатель: выберите задачу и введите числа: решатель найдёт длину вектора, расстояние между точками, середину отрезка, второй конец отрезка, расстояния от точки до начала координат, осей и плоскостей, вид треугольника, диагональ параллелепипеда, покажет решение по шагам и построит чертёж. Или выберите «Задания на соответствие» и соедините пары карточек.',
+  ref:'Обозначения, формулы и термины темы 11.2. Нажмите на знак, чтобы скопировать его в записи.'},
+ notation:'Обозначения',real:'В жизни',proof:'Доказательство',sym:'Запись',more:'Ещё',
+ hint:'Потяните фигуру, чтобы повернуть',reset:'Сбросить вид',
+ qOf:'Вопрос',of:'из',next:'Дальше',finish:'Завершить',result:'Результат',again:'Пройти ещё раз',ok:'Верно.',bad:'Неверно.',
+ r5:'Отлично, тема усвоена.',r3:'Хорошо. Повторите карточки, где были ошибки.',r0:'Вернитесь к карточкам и попробуйте ещё раз.',
+ pen:'Ручка',eraser:'Ластик',c1:'Синяя ручка',c2:'Красная ручка',c3:'Зелёная ручка',size:'Толщина линии',undo:'Отменить последний штрих',
+ clear:'Стереть все записи',clearArmed:'Нажмите ещё раз, чтобы стереть всё',
+ penOn:'Ручка включена: пишите прямо на странице. Чтобы листать, нажмите на ручку ещё раз.',
+ eraserOn:'Ластик: проведите по записи.',cleared:'Записи стёрты',
+ toLight:'Включить светлую тему',toDark:'Включить тёмную тему',penGroup:'Ручка для записей',
+ search:'Найти знак, формулу или термин',all:'Все',empty:'Ничего не найдено',copied:'Скопировано',copyFail:'Не удалось скопировать',
+ cntNames:['вершины','рёбра','грани'],cntLetters:['В','Р','Г'],srcNote:'По учебнику В. А. Смирнова, Е. А. Туякова «Геометрия 10», Мектеп, 2019: §21, §22, §23.'},
+kk:{sizeGroup:'Мәтін өлшемі',sizeNames:['Қалыпты мәтін','Ірі мәтін','Өте ірі мәтін'],title:'Вектордың ұзындығы. Арақашықтық',sub:'11.2 тақырып · вектордың ұзындығы, арақашықтық, кесінді ортасы, шешуші',
+ tabs:{len:'Вектордың ұзындығы',dist:'Екі нүктенің арақашықтығы',mid:'Кесінді ортасы',sol:'Есептер',ref:'Анықтама',qz:'Тест'},
+ intro:{
+  len:'11.2 тақырып, §23. a(x; y; z) векторының ұзындығы √(x² + y² + z²) формуласымен өрнектеледі: бұл қырлары |x|, |y|, |z| болатын тікбұрышты параллелепипед диагоналінің ұзындығы. Сызбаны бұрып, жүгірткіні жылжытыңыз.',
+  dist:'11.2 тақырып, §22. A₁(x₁; y₁; z₁) және A₂(x₂; y₂; z₂) нүктелерінің арақашықтығы A₁A₂ векторының ұзындығына тең. Формула Пифагор теоремасын екі рет қолданудан шығады.',
+  mid:'11.2 тақырып, §21. Кесінді ортасының әрбір координатасы оның ұштарының сәйкес координаталарының орта арифметикалық мәніне тең. Формула кесіндінің ортасын, екінші ұшын және параллелепипедтің центрін табуға көмектеседі.',
+  sol:'Шешуші: есепті таңдап, сандарды енгізіңіз: шешуші вектордың ұзындығын, екі нүктенің арақашықтығын, кесіндінің ортасын, кесіндінің екінші ұшын, нүктеден координаталар басына, остерге және жазықтықтарға дейінгі қашықтықты, үшбұрыштың түрін, параллелепипедтің диагоналін табады, шешуін қадам-қадаммен көрсетіп, сызба салады. Немесе «Сәйкестендіру тапсырмалары» бөлімінде карточка жұптарын қосыңыз.',
+  ref:'11.2 тақырыптың белгілері, формулалары және терминдері. Жазбаға көшіру үшін белгіні басыңыз.'},
+ notation:'Белгілеулер',real:'Өмірде',proof:'Дәлелдеу',sym:'Жазылуы',more:'Тағы',
+ hint:'Бұру үшін фигураны сүйреңіз',reset:'Көріністі қалпына келтіру',
+ qOf:'Сұрақ',of:'/',next:'Келесі',finish:'Аяқтау',result:'Нәтиже',again:'Қайта өту',ok:'Дұрыс.',bad:'Бұрыс.',
+ r5:'Тамаша, тақырып меңгерілді.',r3:'Жақсы. Қателескен карточкаларды қайталаңыз.',r0:'Карточкаларға оралып, қайта байқап көріңіз.',
+ pen:'Қалам',eraser:'Өшіргіш',c1:'Көк қалам',c2:'Қызыл қалам',c3:'Жасыл қалам',size:'Сызық қалыңдығы',undo:'Соңғы сызықты болдырмау',
+ clear:'Барлық жазбаны өшіру',clearArmed:'Бәрін өшіру үшін қайта басыңыз',
+ penOn:'Қалам қосулы: бетке тікелей жазыңыз. Жылжыту үшін қаламды қайта басыңыз.',
+ eraserOn:'Өшіргіш: жазудың үстінен жүргізіңіз.',cleared:'Жазбалар өшірілді',
+ toLight:'Жарық тақырыпты қосу',toDark:'Қараңғы тақырыпты қосу',penGroup:'Жазба қаламы',
+ search:'Белгіні, формуланы немесе терминді іздеу',all:'Барлығы',empty:'Ештеңе табылмады',copied:'Көшірілді',copyFail:'Көшіру мүмкін болмады',
+ cntNames:['төбелер','қырлар','жақтар'],cntLetters:['Т','К','Ж'],srcNote:'В. А. Смирнов, Е. А. Тұяқов «Геометрия 10» оқулығы бойынша, Мектеп, 2019: §21, §22, §23.'}
+};
+
+var LEGEND=[
+ ['|a|',{ru:'длина вектора a',kk:'a векторының ұзындығы'}],
+ ['a(x; y; z)',{ru:'вектор с координатами x, y, z',kk:'координаталары x, y, z болатын вектор'}],
+ ['A₁(x₁; y₁; z₁)',{ru:'точка с координатами x₁, y₁, z₁',kk:'координаталары x₁, y₁, z₁ болатын нүкте'}],
+ ['|A₁A₂|',{ru:'расстояние между точками A₁ и A₂',kk:'A₁ және A₂ нүктелерінің арақашықтығы'}],
+ ['C',{ru:'середина отрезка A₁A₂',kk:'A₁A₂ кесіндісінің ортасы'}],
+ ['O(0; 0; 0)',{ru:'начало координат',kk:'координаталар басы'}]
+];
+T.ru.lineTool='Прямая линия';T.ru.lineOn='Прямая линия: проведите от начала до конца. Почти горизонтальная или вертикальная линия выровняется сама.';
+T.kk.lineTool='Түзу сызық';T.kk.lineOn='Түзу сызық: басынан соңына дейін жүргізіңіз. Көлденең немесе тік шамалас сызық өздігінен түзеледі.';
+
+/* ---------- 3D helpers ---------- */
+/* ---------- 3D helpers ---------- */
+function planeAround(th,hx,hs){var s=Math.sin(th),c=Math.cos(th);return [[-hx,-hs*s,-hs*c],[hx,-hs*s,-hs*c],[hx,hs*s,hs*c],[-hx,hs*s,hs*c]];}
+function yShift(pts,dy){return pts.map(function(p){return [p[0],p[1]+dy,p[2]];});}
+function lerp(a,b,t){return [a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t,a[2]+(b[2]-a[2])*t];}
+function pl(pts,col,lab,li){return {k:'plane',pts:pts,col:col,lab:lab,li:li};}
+function ln(a,b,o){var r={k:'line',a:a,b:b,c:'ink',w:2,le:'b',lo:[8,-10]};for(var k in o)r[k]=o[k];return r;}
+function pt(p,lab,o){var r={k:'pt',p:p,lab:lab,o:[9,-9]};for(var k in o)r[k]=o[k];return r;}
+var PH=planeAround(0,1.25,.95);
+var LET='ABCDEFGH';
+
+/* polyhedra */
+function ngon(n,r,y,rot){var a=[],k,t;for(k=0;k<n;k++){t=rot+2*Math.PI*k/n;a.push([r*Math.cos(t),y,r*Math.sin(t)]);}return a;}
+function poly(V,F,names){return {k:'poly',V:V,F:F,names:names};}
+function boxPoly(hx,hy,hz,sx,sz){
+ var b=[[-hx,-hy,hz],[hx,-hy,hz],[hx,-hy,-hz],[-hx,-hy,-hz]],
+     t=b.map(function(q){return [q[0]+sx,hy,q[2]+sz];});
+ return poly(b.concat(t),[[0,1,2,3],[4,5,6,7],[0,1,5,4],[1,2,6,5],[2,3,7,6],[3,0,4,7]],
+  ['A','B','C','D','A'+SUB,'B'+SUB,'C'+SUB,'D'+SUB]);
+}
+function tetraPoly(){
+ return poly([[-.75,-.6,.43],[.75,-.6,.43],[0,-.6,-.87],[0,.62,0]],[[0,1,2],[0,1,3],[1,2,3],[2,0,3]],['A','B','C','D']);
+}
+function prismPoly(n,obl){
+ var rot=Math.PI*.75,b=ngon(n,.85,-.65,rot),t=ngon(n,.85,.65,rot).map(function(q){return obl?[q[0]+.5,q[1],q[2]-.25]:q;}),
+     F=[[],[]],names=[],i,j;
+ for(i=0;i<n;i++){F[0].push(i);F[1].push(n+i);names.push(LET[i]);}
+ for(i=0;i<n;i++)names.push(LET[i]+SUB);
+ for(i=0;i<n;i++){j=(i+1)%n;F.push([i,j,n+j,n+i]);}
+ return poly(b.concat(t),F,names);
+}
+function pyramidPoly(n){
+ var b=ngon(n,.95,-.6,Math.PI*.75),F=[[]],names=[],i,j;
+ for(i=0;i<n;i++){F[0].push(i);names.push(LET[i]);}
+ for(i=0;i<n;i++){j=(i+1)%n;F.push([i,j,n]);}
+ names.push('S');
+ return poly(b.concat([[0,.85,0]]),F,names);
+}
+function polyCounts(p){
+ var seen={},e=0;
+ p.F.forEach(function(f){for(var i=0;i<f.length;i++){var a=f[i],b=f[(i+1)%f.length],k=a<b?a+'-'+b:b+'-'+a;if(!seen[k]){seen[k]=1;e++;}}});
+ return [p.V.length,e,p.F.length];
+}
+
+/* ---------- content ---------- */
+var ITEMS={};
+var LIST={len:['l1','l2','l3'],dist:['d1','d2','d3','d4'],mid:['m1','m2','m3','m4']};
+/* ---------- vector helpers and angle marks ---------- */
+function vadd(a,b){return [a[0]+b[0],a[1]+b[1],a[2]+b[2]];}
+function vsub(a,b){return [a[0]-b[0],a[1]-b[1],a[2]-b[2]];}
+function vmul(a,k){return [a[0]*k,a[1]*k,a[2]*k];}
+function vdot(a,b){return a[0]*b[0]+a[1]*b[1]+a[2]*b[2];}
+function vcross(a,b){return [a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]];}
+function vlen(a){return Math.sqrt(vdot(a,a));}
+function vunit(a){var l=vlen(a)||1;return vmul(a,1/l);}
+function angDeg(a,b){var c=vdot(a,b)/(vlen(a)*vlen(b));return Math.acos(Math.max(-1,Math.min(1,c)))/D;}
+function fmtN(x,d){return String(+x.toFixed(d)).replace('.',',');}
+function ang(o,u,w,opt){var r={k:'ang',o:o,u:vunit(u),w:vunit(w),r:.3,sq:false,lab:'',col:'b'};for(var k in opt)r[k]=opt[k];return r;}
+function rightAt(o,u,w,r){return ang(o,u,w,{sq:true,r:r||.16});}
+function dashed(a,b,c){return ln(a,b,{c:c||'faint',d:1,w:1.6});}
+var BIG=planeAround(0,1.5,1.15);
+
+function cubeP(){return boxPoly(.56,.56,.56,0,0);}
+function nmv(P,pair){return P.names[pair[0]]+P.names[pair[1]];}
+function idxOf(P,q){var i;for(i=0;i<P.V.length;i++)if(vlen(vsub(P.V[i],q))<1e-6)return i;return -1;}
+function rayDir(psi){return [Math.cos(psi*D),0,Math.sin(psi*D)];}
+var KS=.95/3;
+function dec1(n){return fmtN(n/10,1);}
+function perpTo(v,e){return vsub(v,vmul(e,vdot(v,e)));}
+function centroid(P,idx){var c=[0,0,0];idx.forEach(function(i){c=vadd(c,P.V[i]);});return vmul(c,1/idx.length);}
+
+/* ================= helpers for coordinate scenes (display x,y,z -> render x,z,y) ================= */
+function A3(p,s){return [p[0]*s,p[2]*s,p[1]*s];}
+function axes3(Lp,Ln,o){
+ o=o||{};
+ var r=[
+  ln([-Ln,0,0],[0,0,0],{c:'faint',d:1,w:1.4}),
+  ln([0,0,-Ln],[0,0,0],{c:'faint',d:1,w:1.4}),
+  ln([0,-Ln,0],[0,0,0],{c:'faint',d:1,w:1.4}),
+  ln([0,0,0],[Lp,0,0],{c:'ink',w:2,arrow:1,lab:'x',le:'b',lo:[13,-3]}),
+  ln([0,0,0],[0,0,Lp],{c:'ink',w:2,arrow:1,lab:'y',le:'b',lo:[-12,9]}),
+  ln([0,0,0],[0,Lp,0],{c:'ink',w:2,arrow:1,lab:'z',le:'b',lo:[11,-6]}),
+  pt([0,0,0],'O',{o:[-13,12]})
+ ];
+ if(o.noO)r.pop();
+ return r;
+}
+function Pn(p,s,lab,o){return pt(A3(p,s),lab,{o:o||[11,-10]});}
+function Sg(p,q,s,c,w,d){return ln(A3(p,s),A3(q,s),{c:c||'accent',w:w||2.4,d:d?1:0});}
+function Ar(p,q,s,c,lab,lo,w){var o={c:c||'accent',w:w||2.6,arrow:1};if(lab){o.lab=lab;o.le='m';o.lt=.5;o.lo=lo||[10,-10];}return ln(A3(p,s),A3(q,s),o);}
+function dropBox(p,s){
+ var x=p[0],y=p[1],z=p[2],o=[];
+ function d(a,b){o.push(dashed(A3(a,s),A3(b,s),'faint'));}
+ d([x,y,z],[x,y,0]);d([x,y,z],[x,0,z]);d([x,y,z],[0,y,z]);
+ d([x,y,0],[x,0,0]);d([x,y,0],[0,y,0]);d([x,0,z],[x,0,0]);d([x,0,z],[0,0,z]);d([0,y,z],[0,y,0]);d([0,y,z],[0,0,z]);
+ return o;
+}
+function coordPlanes(h,lb){
+ return [pl([[-h,0,-h],[h,0,-h],[h,0,h],[-h,0,h]],'a',lb?'Oxy':'',2),
+         pl([[-h,-h,0],[h,-h,0],[h,h,0],[-h,h,0]],'b',lb?'Oxz':'',3),
+         pl([[0,-h,-h],[0,-h,h],[0,h,h],[0,h,-h]],'c',lb?'Oyz':'',1)];
+}
+function vtxt(a){return '('+a.map(function(x){return fmtN(x,2);}).join('; ')+')';}
+function cubeVerts(a){
+ return {D:[0,0,0],C:[a,0,0],A:[0,a,0],B:[a,a,0],D1:[0,0,a],C1:[a,0,a],A1:[0,a,a],B1:[a,a,a]};
+}
+var CUBE_NAMES=['A','B','C','D','A'+SUB,'B'+SUB,'C'+SUB,'D'+SUB],CUBE_KEYS=['A','B','C','D','A1','B1','C1','D1'];
+function boxPolyD(p,q,r,s){
+ var V=CUBE_KEYS.map(function(k){
+  var X={A:[0,q,0],B:[p,q,0],C:[p,0,0],D:[0,0,0],A1:[0,q,r],B1:[p,q,r],C1:[p,0,r],D1:[0,0,r]}[k];
+  return A3(X,s);
+ });
+ return poly(V,[[0,1,2,3],[4,5,6,7],[0,1,5,4],[1,2,6,5],[2,3,7,6],[3,0,4,7]],CUBE_NAMES);
+}
+
+/* ================= helpers for 11.2 ================= */
+function spanBox(P,Q,s,c){
+ var xs=[P[0],Q[0]],ys=[P[1],Q[1]],zs=[P[2],Q[2]],V=[],i,j,k,o=[];
+ for(i=0;i<2;i++)for(j=0;j<2;j++)for(k=0;k<2;k++)V.push([xs[i],ys[j],zs[k]]);
+ [[0,1],[2,3],[4,5],[6,7],[0,2],[1,3],[4,6],[5,7],[0,4],[1,5],[2,6],[3,7]].forEach(function(e){o.push(dashed(A3(V[e[0]],s),A3(V[e[1]],s),c||'faint'));});
+ return o;
+}
+function Sl(p,q,s,c,lab,lo,w){return ln(A3(p,s),A3(q,s),{c:c||'accent',w:w||2.4,lab:lab,le:'m',lt:.5,lo:lo||[10,-6]});}
+function sq(x){return x*x;}
+function rtv(q){return sqrtStr(q,Math.sqrt(q));}
+function rw(p,q,r){return rightAt(A3(p,1),vsub(A3(q,1),A3(p,1)),vsub(A3(r,1),A3(p,1)),.12);}
+
+/* ================= tab len: §23 ================= */
+ITEMS.l1={tag:'§23',
+ title:{ru:'Длина вектора по его координатам',kk:'Вектордың ұзындығын координаталары арқылы табу'},
+ stmt:{ru:'Длина вектора a(x; y; z) выражается через его координаты формулой |a| = √(x² + y² + z²). Это длина диагонали прямоугольного параллелепипеда с рёбрами |x|, |y|, |z|.',
+       kk:'a(x; y; z) векторының ұзындығы оның координаталары арқылы |a| = √(x² + y² + z²) формуласымен өрнектеледі. Бұл қырлары |x|, |y|, |z| болатын тікбұрышты параллелепипед диагоналінің ұзындығы.'},
+ defs:{ru:['Квадрат длины вектора равен сумме квадратов его координат: |a|² = x² + y² + z².','Скалярный квадрат вектора равен квадрату его длины: a² = |a|², поэтому |a| = √(a·a).','Длина вектора неотрицательна; |a| = 0 только для нулевого вектора (0; 0; 0).'],
+       kk:['Вектор ұзындығының квадраты оның координаталарының квадраттарының қосындысына тең: |a|² = x² + y² + z².','Вектордың скаляр квадраты оның ұзындығының квадратына тең: a² = |a|², сондықтан |a| = √(a·a).','Вектордың ұзындығы теріс емес; |a| = 0 тек нөлдік (0; 0; 0) вектор үшін ғана орындалады.']},
+ sym:{ru:'|a| = √(x² + y² + z²),  |a|² = x² + y² + z²',kk:'|a| = √(x² + y² + z²),  |a|² = x² + y² + z²'},
+ extra:{ru:'Пример: a(2; 3; 6): |a| = √(4 + 9 + 36) = √49 = 7. На плоскости та же формула без z: |a| = √(x² + y²).',kk:'Мысал: a(2; 3; 6): |a| = √(4 + 9 + 36) = √49 = 7. Жазықтықта формула z-сіз: |a| = √(x² + y²).'},
+ real:{ru:'Прямой путь дрона из начала координат в точку (2; 3; 6) равен 7 единицам, хотя по осям он пролетел бы 2 + 3 + 6 = 11.',kk:'Дронның координаталар басынан (2; 3; 6) нүктесіне дейінгі тура жолы 7 бірлікке тең, ал остер бойымен ұшса 2 + 3 + 6 = 11 болар еді.'},
+ proof:[
+  {ru:'Отложим вектор a от начала координат, его конец — точка A(x; y; z). Пусть A′(x; y; 0) — проекция A на плоскость Oxy. Треугольник OA′A прямоугольный (AA′ ⊥ Oxy), AA′ = |z|.',kk:'a векторын координаталар басынан саламыз, оның ұшы — A(x; y; z) нүктесі. A′(x; y; 0) — A нүктесінің Oxy жазықтығындағы проекциясы болсын. OA′A үшбұрышы тікбұрышты (AA′ ⊥ Oxy), AA′ = |z|.'},
+  {ru:'В плоскости Oxy по теореме Пифагора OA′² = x² + y².',kk:'Oxy жазықтығында Пифагор теоремасы бойынша OA′² = x² + y².'},
+  {ru:'Тогда |a|² = OA² = OA′² + AA′² = x² + y² + z².',kk:'Сонда |a|² = OA² = OA′² + AA′² = x² + y² + z².'}],
+ def:'tri',v0:{yaw:-.35,pitch:.35},
+ modes:[{id:'tri',ru:'Два прямоугольных треугольника',kk:'Екі тікбұрышты үшбұрыш',cap:null},
+        {id:'box',ru:'Диагональ параллелепипеда',kk:'Параллелепипед диагоналі',cap:null}],
+ slider:{min:0,max:7,def:6,sym:'z',unit:''},
+ dyn:function(v,L){
+  var z=v.n,q=13+z*z;
+  return 'a(2; 3; '+z+'): |a| = √(4 + 9 + '+z*z+') = '+rtv(q)+(v.mode==='tri'?(L==='ru'?'. OA′ = √13, AA′ = '+z+'.':'. OA′ = √13, AA′ = '+z+'.'):'.');
+ },
+ build:function(m,v){
+  var s=.2,z=v.n,A=[2,3,z],A1=[2,3,0],O=[0,0,0],o=axes3(1.6,.7);
+  if(m==='box'){
+   return o.concat(dropBox(A,s),[Ar(O,A,s,'accent','a',[-14,-6],3),Pn(A,s,'A',[12,-10])]);
+  }
+  o=o.concat([dashed(A3([2,0,0],s),A3(A1,s),'faint'),dashed(A3([0,3,0],s),A3(A1,s),'faint'),
+   Sg(O,A1,s,'c',2.6),Sg(A1,A,s,'b',2.6),Ar(O,A,s,'accent','a',[-14,-6],3),Pn(A1,s,'A′',[12,10]),Pn(A,s,'A',[12,-10])]);
+  if(z>0)o.push(ang(A3(A1,s),vsub(A3(O,s),A3(A1,s)),vsub(A3(A,s),A3(A1,s)),{sq:true,r:.13}));
+  return o;
+ }};
+
+ITEMS.l2={tag:'§23',
+ title:{ru:'Длина вектора λ·a',kk:'λ·a векторының ұзындығы'},
+ stmt:{ru:'При умножении вектора на число λ все его координаты умножаются на λ, а длина — на |λ|: |λ·a| = |λ|·|a|. Векторы a и λ·a коллинеарны; при λ > 0 их направления совпадают, при λ < 0 противоположны.',
+       kk:'Векторды λ санына көбейткенде оның барлық координаталары λ-ға, ал ұзындығы |λ|-ға көбейтіледі: |λ·a| = |λ|·|a|. a және λ·a векторлары коллинеар; λ > 0 болса бағыттары бірдей, λ < 0 болса қарама-қарсы.'},
+ sym:{ru:'|λ·a| = |λ|·|a|',kk:'|λ·a| = |λ|·|a|'},
+ extra:{ru:'Пример: a(1; 2; 2), |a| = 3. Тогда |2·a| = |(2; 4; 4)| = √36 = 6 = 2·3, а |−a| = |a| = 3.',kk:'Мысал: a(1; 2; 2), |a| = 3. Сонда |2·a| = |(2; 4; 4)| = √36 = 6 = 2·3, ал |−a| = |a| = 3.'},
+ real:{ru:'Дрон делает шаг вдвое длиннее в том же направлении — путь удваивается; шаг назад той же длины даёт ту же длину, но обратное направление.',kk:'Дрон сол бағытта екі есе ұзын қадам жасайды — жол екі есе артады; кері бағытта сондай қадам ұзындықты өзгертпейді, бағытын ғана өзгертеді.'},
+ proof:[
+  {ru:'Пусть a(x; y; z). Тогда λ·a = (λx; λy; λz).',kk:'a(x; y; z) болсын. Сонда λ·a = (λx; λy; λz).'},
+  {ru:'|λ·a| = √(λ²x² + λ²y² + λ²z²) = √(λ²(x² + y² + z²)).',kk:'|λ·a| = √(λ²x² + λ²y² + λ²z²) = √(λ²(x² + y² + z²)).'},
+  {ru:'Так как √(λ²) = |λ|, получаем |λ·a| = |λ|·|a|.',kk:'√(λ²) = |λ| болғандықтан, |λ·a| = |λ|·|a| аламыз.'}],
+ def:'mul',v0:{yaw:-.35,pitch:.35},
+ modes:[{id:'mul',ru:'λ·a',kk:'λ·a',cap:null}],
+ slider:{min:-20,max:25,def:15,sym:'λ',unit:'',fmt:dec1},
+ dyn:function(v,L){
+  var l=v.n/10,al=Math.abs(l)*3,t=l===0?{ru:'λ = 0: нулевой вектор, длина 0.',kk:'λ = 0: нөлдік вектор, ұзындығы 0.'}:(l>0?{ru:'λ > 0: направление то же.',kk:'λ > 0: бағыты сол.'}:{ru:'λ < 0: направление противоположное.',kk:'λ < 0: бағыты қарама-қарсы.'});
+  return 'a(1; 2; 2), |a| = 3; λ = '+fmtN(l,1)+': |λ·a| = |'+fmtN(l,1)+'|·3 = '+fmtN(al,2)+'. '+t[L];
+ },
+ build:function(m,v){
+  var s=.3,l=v.n/10,a=[1,2,2],la=[l,2*l,2*l];
+  return axes3(1.6,.9).concat([
+   ln(A3([-1.5,-3,-3],s),A3([2.6,5.2,5.2],s),{c:'faint',d:1,w:1.2}),
+   Ar([0,0,0],a,s,'a','a',[-14,-6]),
+   Ar([0,0,0],la,s,'accent','λa',[16,-8],3)]);
+ }};
+
+ITEMS.l3={tag:'§23',
+ title:{ru:'Единичный и нулевой векторы',kk:'Бірлік және нөлдік векторлар'},
+ stmt:{ru:'Вектор, длина которого равна 1, называется единичным. Координатные векторы i(1; 0; 0), j(0; 1; 0), k(0; 0; 1) единичные. Для ненулевого вектора a вектор e = a / |a| единичный и сонаправлен с a. Нулевой вектор имеет длину 0.',
+       kk:'Ұзындығы 1-ге тең векторды бірлік вектор деп атайды. i(1; 0; 0), j(0; 1; 0), k(0; 0; 1) координаталық векторлары бірлік векторлар. Нөлдік емес a векторы үшін e = a / |a| векторы бірлік вектор және a-мен бағыттас. Нөлдік вектордың ұзындығы 0-ге тең.'},
+ sym:{ru:'e = a / |a|,  |e| = 1;  |i| = |j| = |k| = 1',kk:'e = a / |a|,  |e| = 1;  |i| = |j| = |k| = 1'},
+ extra:{ru:'Пример: a(1; 2; 2), |a| = 3, e = (1/3; 2/3; 2/3). Проверка: |e| = √(1/9 + 4/9 + 4/9) = 1.',kk:'Мысал: a(1; 2; 2), |a| = 3, e = (1/3; 2/3; 2/3). Тексеру: |e| = √(1/9 + 4/9 + 4/9) = 1.'},
+ real:{ru:'Единичный вектор задаёт только направление, например направление ветра; умножив его на число, получаем вектор нужной длины.',kk:'Бірлік вектор тек бағытты береді, мысалы желдің бағытын; оны санға көбейтіп, қажетті ұзындықтағы векторды аламыз.'},
+ proof:[
+  {ru:'e = (1/|a|)·a, значит, e коллинеарен a, и λ = 1/|a| > 0, то есть направления совпадают.',kk:'e = (1/|a|)·a, демек e векторы a-ға коллинеар және λ = 1/|a| > 0, яғни бағыттары бірдей.'},
+  {ru:'По свойству длины |e| = (1/|a|)·|a| = 1.',kk:'Ұзындық қасиеті бойынша |e| = (1/|a|)·|a| = 1.'}],
+ def:'unit',v0:{yaw:-.35,pitch:.35},
+ modes:[{id:'unit',ru:'e = a / |a|',kk:'e = a / |a|',cap:{ru:'a(1; 2; 2), |a| = 3;  e = (1/3; 2/3; 2/3),  |e| = 1.',kk:'a(1; 2; 2), |a| = 3;  e = (1/3; 2/3; 2/3),  |e| = 1.'}},
+        {id:'ijk',ru:'Векторы i, j, k',kk:'i, j, k векторлары',cap:{ru:'|i| = |j| = |k| = 1: координатные векторы единичные.',kk:'|i| = |j| = |k| = 1: координаталық векторлар бірлік векторлар.'}}],
+ build:function(m){
+  if(m==='ijk'){
+   var u=.5;
+   return axes3(1.45,.7).concat([Ar([0,0,0],[1,0,0],u,'a','i',[0,16]),Ar([0,0,0],[0,1,0],u,'b','j',[-14,6]),Ar([0,0,0],[0,0,1],u,'c','k',[-14,0])]);
+  }
+  var s=.45,a=[1,2,2],e=[1/3,2/3,2/3];
+  return axes3(1.5,.8).concat([dashed(A3(a,s),A3([a[0],a[1],0],s),'faint'),Ar([0,0,0],a,s,'a','a',[-14,-6],2.2),Ar([0,0,0],e,s,'accent','e',[14,8],3.6),Pn(a,s,'A',[12,-10])]);
+ }};
+
+/* ================= tab dist: §22 ================= */
+ITEMS.d1={tag:'§22',
+ title:{ru:'Расстояние между двумя точками',kk:'Екі нүктенің арақашықтығы'},
+ stmt:{ru:'Теорема. Расстояние между точками A₁(x₁; y₁; z₁) и A₂(x₂; y₂; z₂) выражается формулой A₁A₂ = √((x₂ − x₁)² + (y₂ − y₁)² + (z₂ − z₁)²).',
+       kk:'Теорема. A₁(x₁; y₁; z₁) және A₂(x₂; y₂; z₂) нүктелерінің арақашықтығы A₁A₂ = √((x₂ − x₁)² + (y₂ − y₁)² + (z₂ − z₁)²) формуласымен өрнектеледі.'},
+ defs:{ru:['Расстояние между точками — длина отрезка A₁A₂, то есть длина вектора A₁A₂ = (x₂ − x₁; y₂ − y₁; z₂ − z₁).','Формула не зависит от порядка точек: A₁A₂ = A₂A₁.'],
+       kk:['Нүктелердің арақашықтығы — A₁A₂ кесіндісінің ұзындығы, яғни A₁A₂ = (x₂ − x₁; y₂ − y₁; z₂ − z₁) векторының ұзындығы.','Формула нүктелердің ретіне тәуелсіз: A₁A₂ = A₂A₁.']},
+ sym:{ru:'A₁A₂ = √((x₂−x₁)² + (y₂−y₁)² + (z₂−z₁)²)',kk:'A₁A₂ = √((x₂−x₁)² + (y₂−y₁)² + (z₂−z₁)²)'},
+ extra:{ru:'Пример: A₁(1; 1; 1), A₂(3; 4; 7): A₁A₂ = √(4 + 9 + 36) = 7. На плоскости: A₁A₂ = √((x₂ − x₁)² + (y₂ − y₁)²).',kk:'Мысал: A₁(1; 1; 1), A₂(3; 4; 7): A₁A₂ = √(4 + 9 + 36) = 7. Жазықтықта: A₁A₂ = √((x₂ − x₁)² + (y₂ − y₁)²).'},
+ real:{ru:'Расстояние по прямой между двумя дронами, положения которых заданы тремя координатами.',kk:'Орындары үш координатамен берілген екі дрон арасындағы түзу бойымен қашықтық.'},
+ proof:[
+  {ru:'Пусть A₁′, A₂′ — проекции точек A₁, A₂ на плоскость Oxy: A₁′(x₁; y₁; 0), A₂′(x₂; y₂; 0). На плоскости A₁′A₂′² = (x₂ − x₁)² + (y₂ − y₁)².',kk:'A₁′, A₂′ — A₁, A₂ нүктелерінің Oxy жазықтығындағы проекциялары: A₁′(x₁; y₁; 0), A₂′(x₂; y₂; 0). Жазықтықта A₁′A₂′² = (x₂ − x₁)² + (y₂ − y₁)².'},
+  {ru:'Через A₁ проведём прямую, параллельную A₁′A₂′, и обозначим B её точку пересечения с прямой A₂A₂′. Треугольник A₁BA₂ прямоугольный: A₁B = A₁′A₂′, BA₂ = |z₂ − z₁|.',kk:'A₁ нүктесі арқылы A₁′A₂′ түзуіне параллель түзу жүргізіп, оның A₂A₂′ түзуімен қиылысу нүктесін B деп белгілейміз. A₁BA₂ үшбұрышы тікбұрышты: A₁B = A₁′A₂′, BA₂ = |z₂ − z₁|.'},
+  {ru:'По теореме Пифагора A₁A₂² = A₁B² + BA₂² = (x₂ − x₁)² + (y₂ − y₁)² + (z₂ − z₁)².',kk:'Пифагор теоремасы бойынша A₁A₂² = A₁B² + BA₂² = (x₂ − x₁)² + (y₂ − y₁)² + (z₂ − z₁)².'}],
+ def:'seg',v0:{yaw:-.35,pitch:.35},
+ modes:[{id:'seg',ru:'Отрезок и параллелепипед',kk:'Кесінді және параллелепипед',cap:null},
+        {id:'proj',ru:'Доказательство',kk:'Дәлелдеу',cap:null}],
+ slider:{min:2,max:9,def:7,sym:'z₂',unit:''},
+ dyn:function(v,L){
+  var z=v.n,q=4+9+sq(z-1);
+  return 'A₁(1; 1; 1), A₂(3; 4; '+z+'): A₁A₂ = √(2² + 3² + '+(z-1)+'²) = √(4 + 9 + '+sq(z-1)+') = '+rtv(q)+'.';
+ },
+ build:function(m,v){
+  var s=.17,z=v.n,A1=[1,1,1],A2=[3,4,z],o=axes3(1.6,.7);
+  if(m==='proj'){
+   var B1=[1,1,0],B2=[3,4,0],B=[3,4,1];
+   o=[pl([[-1,0,-1],[1,0,-1],[1,0,1],[-1,0,1]],'a','Oxy',2)].concat(o);
+   o.push(dashed(A3(A1,s),A3(B1,s),'faint'),dashed(A3(A2,s),A3(B2,s),'faint'),Sg(B1,B2,s,'c',2.2),Sg(A1,B,s,'b',2.4),Sg(B,A2,s,'a',2.4),Sg(A1,A2,s,'accent',3),
+    ang(A3(B,s),vsub(A3(A1,s),A3(B,s)),vsub(A3(A2,s),A3(B,s)),{sq:true,r:.12}),
+    Pn(B1,s,'A₁′',[-16,6]),Pn(B2,s,'A₂′',[14,10]),Pn(B,s,'B',[14,6]));
+  }else{
+   o=o.concat(spanBox(A1,A2,s),[Sg(A1,A2,s,'accent',3)]);
+  }
+  o.push(Pn(A1,s,'A₁',[-14,-8]),Pn(A2,s,'A₂',[12,-10]));
+  return o;
+ }};
+
+ITEMS.d2={tag:'§22',
+ title:{ru:'Расстояние от точки до начала координат, до осей и плоскостей',kk:'Нүктеден координаталар басына, остерге және жазықтықтарға дейінгі қашықтық'},
+ stmt:{ru:'Для точки A(x; y; z) расстояние до начала координат равно OA = √(x² + y² + z²). Расстояния до координатных осей: до Ox — √(y² + z²), до Oy — √(x² + z²), до Oz — √(x² + y²). Расстояния до координатных плоскостей: до Oxy — |z|, до Oxz — |y|, до Oyz — |x|.',
+       kk:'A(x; y; z) нүктесінен координаталар басына дейінгі қашықтық OA = √(x² + y² + z²). Координаталық остерге дейінгі қашықтық: Ox-ке — √(y² + z²), Oy-ке — √(x² + z²), Oz-ке — √(x² + y²). Координаталық жазықтықтарға дейінгі қашықтық: Oxy-ге — |z|, Oxz-ке — |y|, Oyz-ке — |x|.'},
+ sym:{ru:'OA = √(x²+y²+z²);  ρ(A, Ox) = √(y²+z²);  ρ(A, Oxy) = |z|',kk:'OA = √(x²+y²+z²);  ρ(A, Ox) = √(y²+z²);  ρ(A, Oxy) = |z|'},
+ extra:{ru:'Пример: A(1; −2; 3) до оси Ox: √(4 + 9) = √13; до Oy: √(1 + 9) = √10; до Oz: √(1 + 4) = √5 (задача 22.7).',kk:'Мысал: A(1; −2; 3) нүктесінен Ox осіне дейін: √(4 + 9) = √13; Oy осіне: √(1 + 9) = √10; Oz осіне: √(1 + 4) = √5 (22.7-есеп).'},
+ real:{ru:'Высота дрона над полом — это |z|; расстояние до угла комнаты — OA.',kk:'Дронның еденнен биіктігі — |z|; бөлменің бұрышына дейінгі қашықтық — OA.'},
+ def:'origin',v0:{yaw:-.35,pitch:.35},
+ modes:[{id:'origin',ru:'До начала координат',kk:'Координаталар басына дейін',cap:{ru:'A(2; 3; 4): OA = √(4 + 9 + 16) = √29 ≈ 5,39.',kk:'A(2; 3; 4): OA = √(4 + 9 + 16) = √29 ≈ 5,39.'}},
+        {id:'axes',ru:'До осей',kk:'Остерге дейін',cap:{ru:'До Ox: √(9 + 16) = 5;  до Oy: √(4 + 16) = 2√5;  до Oz: √(4 + 9) = √13.',kk:'Ox-ке: √(9 + 16) = 5;  Oy-ке: √(4 + 16) = 2√5;  Oz-ке: √(4 + 9) = √13.'}},
+        {id:'planes',ru:'До плоскостей',kk:'Жазықтықтарға дейін',cap:{ru:'До Oxy: |z| = 4;  до Oxz: |y| = 3;  до Oyz: |x| = 2.',kk:'Oxy-ге: |z| = 4;  Oxz-ке: |y| = 3;  Oyz-ке: |x| = 2.'}}],
+ build:function(m){
+  var s=.25,A=[2,3,4],o=axes3(1.5,.7);
+  if(m==='axes'){
+   return o.concat([dashed(A3(A,s),A3([2,3,0],s),'faint'),Sg(A,[2,0,0],s,'a',2.6),Sg(A,[0,3,0],s,'b',2.6),Sg(A,[0,0,4],s,'c',2.6),
+    Pn([2,0,0],s,'Ax',[0,17]),Pn([0,3,0],s,'Ay',[-15,10]),Pn([0,0,4],s,'Az',[-16,0]),Pn(A,s,'A',[12,-10])]);
+  }
+  if(m==='planes'){
+   o=coordPlanes(1,false).concat(o);
+   return o.concat([Sg(A,[2,3,0],s,'a',2.6),Sg(A,[2,0,4],s,'b',2.6),Sg(A,[0,3,4],s,'c',2.6),
+    Pn([2,3,0],s,'Axy',[0,16]),Pn([2,0,4],s,'Axz',[-16,0]),Pn([0,3,4],s,'Ayz',[-16,-4]),Pn(A,s,'A',[12,-10])]);
+  }
+  return o.concat(dropBox(A,s),[Sg([0,0,0],A,s,'accent',3.2),Pn(A,s,'A',[12,-10])]);
+ }};
+
+ITEMS.d3={tag:'§22',
+ title:{ru:'Частные случаи: плоскость и ось',kk:'Дербес жағдайлар: жазықтық және ось'},
+ stmt:{ru:'Если точки лежат в плоскости Oxy (z₁ = z₂ = 0), формула переходит в известную из планиметрии: A₁A₂ = √((x₂ − x₁)² + (y₂ − y₁)²). Если точки лежат на оси Ox, то A₁A₂ = |x₂ − x₁|.',
+       kk:'Егер нүктелер Oxy жазықтығында жатса (z₁ = z₂ = 0), формула планиметриядан белгілі түрге келеді: A₁A₂ = √((x₂ − x₁)² + (y₂ − y₁)²). Егер нүктелер Ox осінде жатса, A₁A₂ = |x₂ − x₁|.'},
+ sym:{ru:'z₁ = z₂ = 0:  A₁A₂ = √((x₂−x₁)² + (y₂−y₁)²);  на Ox:  A₁A₂ = |x₂ − x₁|',kk:'z₁ = z₂ = 0:  A₁A₂ = √((x₂−x₁)² + (y₂−y₁)²);  Ox осінде:  A₁A₂ = |x₂ − x₁|'},
+ extra:{ru:'Пример: A₁(1; 1; 0), A₂(4; 5; 0): A₁A₂ = √(9 + 16) = 5. На оси: A₁(1; 0; 0), A₂(5; 0; 0): A₁A₂ = |5 − 1| = 4.',kk:'Мысал: A₁(1; 1; 0), A₂(4; 5; 0): A₁A₂ = √(9 + 16) = 5. Ось бойынша: A₁(1; 0; 0), A₂(5; 0; 0): A₁A₂ = |5 − 1| = 4.'},
+ real:{ru:'Два предмета на полу комнаты: высота z у обоих равна 0, поэтому достаточно двух координат.',kk:'Бөлменің еденіндегі екі зат: екеуінің де z биіктігі 0, сондықтан екі координата жеткілікті.'},
+ def:'plane',v0:{yaw:-.35,pitch:.35},
+ modes:[{id:'plane',ru:'В плоскости Oxy',kk:'Oxy жазықтығында',cap:{ru:'A₁(1; 1; 0), A₂(4; 5; 0): катеты 3 и 4, гипотенуза A₁A₂ = 5.',kk:'A₁(1; 1; 0), A₂(4; 5; 0): катеттері 3 және 4, гипотенузасы A₁A₂ = 5.'}},
+        {id:'axis',ru:'На оси Ox',kk:'Ox осінде',cap:{ru:'A₁(1; 0; 0), A₂(5; 0; 0): A₁A₂ = |5 − 1| = 4.',kk:'A₁(1; 0; 0), A₂(5; 0; 0): A₁A₂ = |5 − 1| = 4.'}}],
+ build:function(m){
+  var s=.25,o=axes3(1.5,.7);
+  if(m==='axis'){
+   var P=[1,0,0],Q=[5,0,0];
+   return o.concat([Sg(P,Q,s,'accent',3.4),Pn(P,s,'A₁',[0,17]),Pn(Q,s,'A₂',[0,17])]);
+  }
+  var A1=[1,1,0],A2=[4,5,0],B=[4,1,0];
+  o=[pl([[-1,0,-1],[1,0,-1],[1,0,1],[-1,0,1]],'a','Oxy',0)].concat(o);
+  return o.concat([Sl(A1,B,s,'c','3',[0,16]),Sl(B,A2,s,'b','4',[14,0]),Sl(A1,A2,s,'accent','5',[-12,-4],3.2),
+   ang(A3(B,s),vsub(A3(A1,s),A3(B,s)),vsub(A3(A2,s),A3(B,s)),{sq:true,r:.1}),Pn(A1,s,'A₁',[-14,8]),Pn(A2,s,'A₂',[12,-8])]);
+ }};
+
+ITEMS.d4={tag:'§22',
+ title:{ru:'Применение: вид треугольника',kk:'Қолданысы: үшбұрыштың түрі'},
+ stmt:{ru:'Чтобы определить вид треугольника по координатам вершин, находят длины трёх сторон по формуле расстояния и сравнивают их. Равны все три — равносторонний; равны две — равнобедренный; для наибольшей стороны c выполняется c² = a² + b² — прямоугольный (обратная теорема Пифагора).',
+       kk:'Үшбұрыштың түрін төбелерінің координаталары бойынша анықтау үшін арақашықтық формуласымен үш қабырғасының ұзындығын тауып, салыстырады. Үшеуі тең болса — тең қабырғалы; екеуі тең болса — тең бүйірлі; ең үлкен қабырға c үшін c² = a² + b² орындалса — тікбұрышты (Пифагор теоремасына кері теорема).'},
+ sym:{ru:'AB, BC, CA — по формуле расстояния;  c² = a² + b² ⇒ угол 90°',kk:'AB, BC, CA — арақашықтық формуласымен;  c² = a² + b² ⇒ бұрышы 90°'},
+ extra:{ru:'Задача 22.6: A(0; 0; 2), B(0; 2; 0), C(2; 0; 0): AB = BC = CA = 2√2 — треугольник равносторонний.',kk:'22.6-есеп: A(0; 0; 2), B(0; 2; 0), C(2; 0; 0): AB = BC = CA = 2√2 — үшбұрыш тең қабырғалы.'},
+ real:{ru:'Три дрона образуют треугольник: по координатам сразу видно, одинаковы ли расстояния между ними.',kk:'Үш дрон үшбұрыш құрайды: координаталар бойынша олардың арақашықтықтары бірдей екені бірден көрінеді.'},
+ def:'equi',v0:{yaw:-.35,pitch:.35},
+ modes:[{id:'equi',ru:'A(0; 0; 2), B(0; 2; 0), C(2; 0; 0)',kk:'A(0; 0; 2), B(0; 2; 0), C(2; 0; 0)',cap:{ru:'AB = BC = CA = √8 = 2√2: треугольник ABC равносторонний.',kk:'AB = BC = CA = √8 = 2√2: ABC үшбұрышы тең қабырғалы.'}},
+        {id:'right',ru:'A(0; 0; 2), B(0; 2; 0), C(0; 0; 0)',kk:'A(0; 0; 2), B(0; 2; 0), C(0; 0; 0)',cap:{ru:'AC = BC = 2, AB = 2√2: 4 + 4 = 8, треугольник прямоугольный равнобедренный.',kk:'AC = BC = 2, AB = 2√2: 4 + 4 = 8, үшбұрыш тікбұрышты тең бүйірлі.'}}],
+ build:function(m){
+  var s=.4,o=axes3(1.4,.7);
+  if(m==='right'){
+   var A=[0,0,2],B=[0,2,0],C=[0,0,0];
+   return o.concat([Sl(A,B,s,'accent','2√2',[14,-6],3),Sl(B,C,s,'b','2',[14,6]),Sl(C,A,s,'c','2',[-12,0]),
+    ang(A3(C,s),vsub(A3(B,s),A3(C,s)),vsub(A3(A,s),A3(C,s)),{sq:true,r:.12}),Pn(A,s,'A',[-12,-8]),Pn(B,s,'B',[12,8]),Pn(C,s,'C',[-12,12])]);
+  }
+  var P=[0,0,2],Q=[0,2,0],R=[2,0,0];
+  return o.concat([Sl(P,Q,s,'a','2√2',[14,-6],3),Sl(Q,R,s,'b','2√2',[12,10],3),Sl(R,P,s,'c','2√2',[-6,-12],3),Pn(P,s,'A',[-12,-8]),Pn(Q,s,'B',[12,8]),Pn(R,s,'C',[12,-8])]);
+ }};
+
+/* ================= tab mid: §21 ================= */
+ITEMS.m1={tag:'§21',
+ title:{ru:'Координаты середины отрезка',kk:'Кесінді ортасының координаталары'},
+ stmt:{ru:'Теорема. Середина отрезка с концами A₁(x₁; y₁; z₁) и A₂(x₂; y₂; z₂) имеет координаты ((x₁ + x₂)/2; (y₁ + y₂)/2; (z₁ + z₂)/2).',
+       kk:'Теорема. A₁(x₁; y₁; z₁), A₂(x₂; y₂; z₂) нүктелерін қосатын кесіндінің ортасының координаталары ((x₁ + x₂)/2; (y₁ + y₂)/2; (z₁ + z₂)/2) болады.'},
+ sym:{ru:'C((x₁+x₂)/2; (y₁+y₂)/2; (z₁+z₂)/2)',kk:'C((x₁+x₂)/2; (y₁+y₂)/2; (z₁+z₂)/2)'},
+ extra:{ru:'Пример: A₁(2; 1; 1), A₂(4; 3; 5), середина C(3; 2; 3). На плоскости та же формула: ((x₁+x₂)/2; (y₁+y₂)/2). Длина A₁C равна половине A₁A₂.',kk:'Мысал: A₁(2; 1; 1), A₂(4; 3; 5), ортасы C(3; 2; 3). Жазықтықта да формула осындай: ((x₁+x₂)/2; (y₁+y₂)/2). A₁C ұзындығы A₁A₂ ұзындығының жартысына тең.'},
+ real:{ru:'Центр качелей между двумя опорами: берём среднее каждой из трёх координат.',kk:'Екі тіректің ортасындағы тербелістің центрі: үш координатаның әрқайсысының орташа мәнін аламыз.'},
+ proof:[
+  {ru:'Пусть C(x; y; z) — середина отрезка A₁A₂. Спроектируем отрезок на плоскость Oxy: получим A′₁(x₁; y₁; 0), A′₂(x₂; y₂; 0), C′(x; y; 0).',kk:'C(x; y; z) — A₁A₂ кесіндісінің ортасы болсын. Кесіндіні Oxy жазықтығына проекциялаймыз: A′₁(x₁; y₁; 0), A′₂(x₂; y₂; 0), C′(x; y; 0) нүктелерін аламыз.'},
+  {ru:'Ортогональное проектирование сохраняет отношение отрезков, лежащих на одной прямой, значит, C′ — середина A′₁A′₂ и x = (x₁ + x₂)/2, y = (y₁ + y₂)/2.',kk:'Ортогональ проекциялау бір түзудің бойында жатқан кесінділердің қатынасын сақтайды, демек C′ — A′₁A′₂ кесіндісінің ортасы және x = (x₁ + x₂)/2, y = (y₁ + y₂)/2.'},
+  {ru:'Проектируя на плоскость Oxz (или Oyz), так же получаем z = (z₁ + z₂)/2.',kk:'Oxz (немесе Oyz) жазықтығына проекциялап, осылайша z = (z₁ + z₂)/2 аламыз.'}],
+ def:'seg',v0:{yaw:-.35,pitch:.35},
+ modes:[{id:'seg',ru:'Отрезок и середина',kk:'Кесінді және оның ортасы',cap:null},
+        {id:'proj',ru:'Проекция на Oxy',kk:'Oxy-ке проекция',cap:null}],
+ slider:{min:1,max:8,def:5,sym:'z₂',unit:''},
+ dyn:function(v,L){
+  var z=v.n,zc=(1+z)/2;
+  return 'A₁(2; 1; 1), A₂(4; 3; '+z+'): C = ((2 + 4)/2; (1 + 3)/2; (1 + '+z+')/2) = C(3; 2; '+fmtN(zc,1)+').'+(v.mode==='proj'?(L==='ru'?' Проекция C′(3; 2; 0) — середина A′₁A′₂.':' C′(3; 2; 0) проекциясы — A′₁A′₂ кесіндісінің ортасы.'):'');
+ },
+ build:function(m,v){
+  var s=.2,z=v.n,A1=[2,1,1],A2=[4,3,z],C=[3,2,(1+z)/2],o=axes3(1.6,.8);
+  if(m==='proj'){
+   var B1=[2,1,0],B2=[4,3,0],BC=[3,2,0];
+   o=[pl([[-1,0,-1],[1,0,-1],[1,0,1],[-1,0,1]],'a','Oxy',2)].concat(o);
+   o.push(dashed(A3(A1,s),A3(B1,s),'faint'),dashed(A3(A2,s),A3(B2,s),'faint'),dashed(A3(C,s),A3(BC,s),'faint'),Sg(B1,B2,s,'c',2.2),Sg(A1,A2,s,'accent',2.6),
+    Pn(B1,s,'A′₁',[-16,6]),Pn(B2,s,'A′₂',[14,10]),Pn(BC,s,'C′',[14,8]));
+  }else{
+   o.push(Sg(A1,A2,s,'accent',2.8),dashed(A3(C,s),A3([3,2,0],s),'faint'));
+  }
+  o.push(Pn(A1,s,'A₁',[-14,-8]),Pn(A2,s,'A₂',[12,-10]),Pn(C,s,'C',[14,-6]));
+  return o;
+ }};
+
+ITEMS.m2={tag:'§21',
+ title:{ru:'Второй конец отрезка по его середине',kk:'Кесіндінің екінші ұшын ортасы бойынша табу'},
+ stmt:{ru:'Если известны конец A(x₁; y₁; z₁) и середина C(x₀; y₀; z₀) отрезка AB, то из формулы середины x₀ = (x₁ + x₂)/2 находим x₂ = 2x₀ − x₁, и так для каждой координаты. Точка B симметрична точке A относительно точки C.',
+       kk:'AB кесіндісінің A(x₁; y₁; z₁) ұшы және C(x₀; y₀; z₀) ортасы белгілі болса, ортаның x₀ = (x₁ + x₂)/2 формуласынан x₂ = 2x₀ − x₁ табамыз, әрбір координата үшін осылай. B нүктесі A нүктесіне C нүктесіне қатысты симметриялы.'},
+ sym:{ru:'B(2x₀ − x₁; 2y₀ − y₁; 2z₀ − z₁)',kk:'B(2x₀ − x₁; 2y₀ − y₁; 2z₀ − z₁)'},
+ extra:{ru:'Пример: A(1; 1; 2), C(3; 2; 4): B(2·3 − 1; 2·2 − 1; 2·4 − 2) = B(5; 3; 6). Векторы AC и CB равны.',kk:'Мысал: A(1; 1; 2), C(3; 2; 4): B(2·3 − 1; 2·2 − 1; 2·4 − 2) = B(5; 3; 6). AC және CB векторлары тең.'},
+ real:{ru:'Зеркальное отражение предмета относительно точки: расстояние от центра до отражения такое же, как до самого предмета.',kk:'Заттың нүктеге қатысты шағылысуы: центрден шағылысқа дейінгі қашықтық центрден заттың өзіне дейінгі қашықтықтай.'},
+ def:'end',v0:{yaw:-.35,pitch:.35},
+ modes:[{id:'end',ru:'Симметрия относительно C',kk:'C нүктесіне қатысты симметрия',cap:null}],
+ slider:{min:2,max:5,def:4,sym:'z₀',unit:''},
+ dyn:function(v,L){
+  var z=v.n;
+  return 'A(1; 1; 2), C(3; 2; '+z+'): B(2·3 − 1; 2·2 − 1; 2·'+z+' − 2) = B(5; 3; '+(2*z-2)+'). AC = CB.';
+ },
+ build:function(m,v){
+  var s=.18,z=v.n,A=[1,1,2],C=[3,2,z],B=[5,3,2*z-2];
+  return axes3(1.6,.8).concat([dashed(A3(C,s),A3([3,2,0],s),'faint'),Ar(A,C,s,'a','',null,2.8),Ar(C,B,s,'b','',null,2.8),Pn(A,s,'A',[-14,-8]),Pn(C,s,'C',[14,-8]),Pn(B,s,'B',[12,-10])]);
+ }};
+
+ITEMS.m3={tag:'§21',
+ title:{ru:'Центр прямоугольного параллелепипеда',kk:'Тікбұрышты параллелепипедтің центрі'},
+ stmt:{ru:'Диагонали прямоугольного параллелепипеда пересекаются в одной точке и делятся ею пополам. Если D — начало координат, DC = a, DA = b, DD₁ = c, то центр — середина диагонали DB₁ — имеет координаты (a/2; b/2; c/2).',
+       kk:'Тікбұрышты параллелепипедтің диагональдары бір нүктеде қиылысады және сол нүктемен тең бөлінеді. D — координаталар басы, DC = a, DA = b, DD₁ = c болса, центр — DB₁ диагоналінің ортасы — (a/2; b/2; c/2) координаталарына ие.'},
+ sym:{ru:'DB₁ = √(a² + b² + c²),  M(a/2; b/2; c/2)',kk:'DB₁ = √(a² + b² + c²),  M(a/2; b/2; c/2)'},
+ extra:{ru:'Пример: a = 4, b = 3, c = 2: DB₁ = √29, центр M(2; 1,5; 1). Все четыре диагонали имеют одинаковую длину.',kk:'Мысал: a = 4, b = 3, c = 2: DB₁ = √29, центр M(2; 1,5; 1). Барлық төрт диагональдың ұзындығы бірдей.'},
+ real:{ru:'Центр коробки — точка, равноудалённая от всех её вершин.',kk:'Қораптың центрі — оның барлық төбесінен бірдей қашықтықта жатқан нүкте.'},
+ def:'box',v0:{yaw:-.35,pitch:.35},
+ modes:[{id:'box',ru:'Диагональ DB₁ и центр M',kk:'DB₁ диагоналі және M центрі',cap:null}],
+ slider:{min:2,max:6,def:4,sym:'c',unit:''},
+ dyn:function(v,L){
+  var c=v.n,q=25+c*c;
+  return 'DC = 4, DA = 3, DD₁ = '+c+': DB₁ = √(16 + 9 + '+c*c+') = '+rtv(q)+'; M(2; 1,5; '+fmtN(c/2,1)+').';
+ },
+ build:function(m,v){
+  var s=.22,c=v.n,P=boxPolyD(4,3,c,s);
+  P.ov=axes3(1.5,.7,{noO:1}).concat([ln(A3([0,0,0],s),A3([4,3,c],s),{c:'accent',w:3}),pt(A3([2,1.5,c/2],s),'M',{o:[14,-8]})]);
+  return [P];
+ }};
+
+ITEMS.m4={tag:'§21',
+ title:{ru:'Пример: медиана треугольника',kk:'Мысал: үшбұрыштың медианасы',},
+ stmt:{ru:'Медиана треугольника соединяет вершину с серединой противоположной стороны. Найдём длину медианы AM треугольника ABC с вершинами A(0; 0; 4), B(2; 0; 0), C(0; 4; 0): сначала середину M стороны BC, потом расстояние AM.',
+       kk:'Үшбұрыштың медианасы төбені қарсы қабырғаның ортасымен қосады. A(0; 0; 4), B(2; 0; 0), C(0; 4; 0) төбелері бар ABC үшбұрышының AM медианасының ұзындығын табайық: алдымен BC қабырғасының M ортасын, сосын AM арақашықтығын табамыз.'},
+ defs:{ru:['M((2 + 0)/2; (0 + 4)/2; (0 + 0)/2) = M(1; 2; 0).','AM = √((1 − 0)² + (2 − 0)² + (0 − 4)²) = √(1 + 4 + 16) = √21 ≈ 4,58.'],
+       kk:['M((2 + 0)/2; (0 + 4)/2; (0 + 0)/2) = M(1; 2; 0).','AM = √((1 − 0)² + (2 − 0)² + (0 − 4)²) = √(1 + 4 + 16) = √21 ≈ 4,58.']},
+ sym:{ru:'M = середина BC,  AM = √((x_M − x_A)² + (y_M − y_A)² + (z_M − z_A)²)',kk:'M = BC ортасы,  AM = √((x_M − x_A)² + (y_M − y_A)² + (z_M − z_A)²)'},
+ real:{ru:'Растяжка от вершины палатки к середине противоположной стороны основания.',kk:'Шатырдың төбесінен табанының қарсы қабырғасының ортасына дейінгі арқан.'},
+ def:'med',v0:{yaw:-.35,pitch:.35},
+ modes:[{id:'med',ru:'Медиана AM',kk:'AM медианасы',cap:{ru:'M(1; 2; 0) — середина BC;  AM = √21 ≈ 4,58.',kk:'M(1; 2; 0) — BC ортасы;  AM = √21 ≈ 4,58.'}}],
+ build:function(){
+  var s=.3,A=[0,0,4],B=[2,0,0],C=[0,4,0],M=[1,2,0];
+  return axes3(1.5,.7).concat([Sg(A,B,s,'a',2.2),Sg(B,C,s,'a',2.2),Sg(C,A,s,'a',2.2),Sg(A,M,s,'accent',3.2),
+   Pn(A,s,'A',[-12,-8]),Pn(B,s,'B',[12,10]),Pn(C,s,'C',[-14,10]),Pn(M,s,'M',[14,8])]);
+ }};
+
+/* ================= solver: coordinates and vectors (§21, §22, §23) ================= */
+function T2(ru,kk){return {ru:ru,kk:kk};}
+function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){var t=a%b;a=b;b=t;}return a;}
+function exactStr(x2){
+ if(!isFinite(x2))return null;
+ if(Math.abs(x2)<1e-12)return '0';
+ var den,m;
+ for(den=1;den<=720;den++){m=x2*den;if(Math.abs(m-Math.round(m))<1e-8*Math.max(1,m)&&Math.round(m)>0)break;}
+ if(den>720)return null;
+ m=Math.round(m);
+ var mn=m*den,k=1,r=mn,d;
+ for(d=2;d*d<=r;d++){while(r%(d*d)===0){r/=d*d;k*=d;}}
+ var g=gcd(k,den);k/=g;den/=g;
+ if(r===1)return den===1?String(k):k+'/'+den;
+ var top=(k===1?'':String(k))+'√'+r;
+ return den===1?top:top+'/'+den;
+}
+function sqrtStr(x2,d){var e=exactStr(x2);return e?(/^\d+$/.test(e)?e:e+' ≈ '+fmtN(d,4)):'≈ '+fmtN(d,4);}
+function cs(v){return '('+v.map(function(x){return fmtN(x,3);}).join('; ')+')';}
+function pn(x){return x<0?'('+fmtN(x,3)+')':fmtN(x,3);}
+function decStr(a){
+ var nm=['i','j','k'],s='',i,c,ab;
+ for(i=0;i<3;i++){c=a[i];if(Math.abs(c)<1e-12)continue;ab=Math.abs(c);
+  s+=(s?(c<0?' − ':' + '):(c<0?'−':''))+(Math.abs(ab-1)<1e-12?'':fmtN(ab,3)+'·')+nm[i];}
+ return s||'0';
+}
+function isZ(a){return Math.abs(a[0])<1e-12&&Math.abs(a[1])<1e-12&&Math.abs(a[2])<1e-12;}
+
+function dropPrims(a){
+ var x=a[0],y=a[1],z=a[2];
+ return [dashed(a,[x,y,0]),dashed(a,[x,0,z]),dashed(a,[0,y,z]),dashed([x,y,0],[x,0,0]),dashed([x,y,0],[0,y,0]),dashed([x,0,z],[x,0,0]),dashed([x,0,z],[0,0,z]),dashed([0,y,z],[0,y,0]),dashed([0,y,z],[0,0,z])];
+}
+function spanPrims(P,Q){
+ var xs=[P[0],Q[0]],ys=[P[1],Q[1]],zs=[P[2],Q[2]],V=[],i,j,k;
+ for(i=0;i<2;i++)for(j=0;j<2;j++)for(k=0;k<2;k++)V.push([xs[i],ys[j],zs[k]]);
+ return [[0,1],[2,3],[4,5],[6,7],[0,2],[1,3],[4,6],[5,7],[0,4],[1,5],[2,6],[3,7]].map(function(e){return dashed(V[e[0]],V[e[1]]);});
+}
+function lenLab(q){var e=exactStr(q);return e||fmtN(Math.sqrt(q),2);}
+function qs(v){return fmtN(v[0]*v[0],3)+' + '+fmtN(v[1]*v[1],3)+' + '+fmtN(v[2]*v[2],3);}
+var CKINDS=[
+ {id:'len',ru:'Длина вектора по координатам',kk:'Вектордың ұзындығын координаталары бойынша табу'},
+ {id:'dist',ru:'Расстояние между двумя точками',kk:'Екі нүктенің арақашықтығы'},
+ {id:'mid',ru:'Координаты середины отрезка',kk:'Кесінді ортасының координаталары'},
+ {id:'end',ru:'Второй конец отрезка по середине',kk:'Кесіндінің екінші ұшын ортасы бойынша табу'},
+ {id:'org',ru:'Расстояния от точки до начала координат, осей и плоскостей',kk:'Нүктеден координаталар басына, остерге және жазықтықтарға дейінгі қашықтық'},
+ {id:'cmp',ru:'Какая точка ближе к началу координат',kk:'Қай нүкте координаталар басына жақын'},
+ {id:'tri',ru:'Вид треугольника по координатам вершин',kk:'Төбелерінің координаталары бойынша үшбұрыштың түрі'},
+ {id:'box',ru:'Прямоугольный параллелепипед: диагональ и середина',kk:'Тікбұрышты параллелепипед: диагональ және орта'}
+];
+var CFLD={
+ len:[['k1','a','v']],dist:[['k1','A₁','v'],['k2','A₂','v']],mid:[['k1','A₁','v'],['k2','A₂','v']],end:[['k1','A','v'],['k2','C','v']],
+ org:[['k1','A','v']],cmp:[['k1','A','v'],['k2','B','v']],tri:[['k1','A','v'],['k2','B','v'],['k3','C','v']],box:[]
+};
+var CDEF={
+ len:{k1:[2,3,6]},dist:{k1:[1,2,3],k2:[-1,1,1]},mid:{k1:[1,2,3],k2:[-1,0,1]},end:{k1:[-1,0,1],k2:[0,1,2]},
+ org:{k1:[3,4,0]},cmp:{k1:[3,1,5],k2:[1,-1,6]},tri:{k1:[0,0,2],k2:[0,2,0],k3:[2,0,0]},box:{p:4,q:3,r:2,P:'D',Q:'B1'}
+};
+var CVK=['D','C','B','A','D1','C1','B1','A1'],CVN=['D','C','B','A','D₁','C₁','B₁','A₁'];
+function vname(k){return CVN[CVK.indexOf(k)];}
+function boxV(k,p,q,r){return {A:[0,q,0],B:[p,q,0],C:[p,0,0],D:[0,0,0],A1:[0,q,r],B1:[p,q,r],C1:[p,0,r],D1:[0,0,r]}[k];}
+var SOLEX=[
+ {id:'e1',tag:{ru:'22.1 а',kk:'22.1 а'},ru:'Расстояние от A(3; 4; 0) до начала координат',kk:'A(3; 4; 0) нүктесінен координаталар басына дейінгі қашықтық',kind:'org',vals:{k1:[3,4,0]}},
+ {id:'e2',tag:{ru:'22.1 б',kk:'22.1 ә'},ru:'Расстояние от B(1; −2; 2) до начала координат',kk:'B(1; −2; 2) нүктесінен координаталар басына дейінгі қашықтық',kind:'org',vals:{k1:[1,-2,2]}},
+ {id:'e3',tag:'22.2',ru:'Какая из точек A(3; 1; 5), B(1; −1; 6) ближе к началу координат?',kk:'A(3; 1; 5), B(1; −1; 6) нүктелерінің қайсысы координаталар басына жақын?',kind:'cmp',vals:{k1:[3,1,5],k2:[1,-1,6]}},
+ {id:'e4',tag:{ru:'22.3 а',kk:'22.3 а'},ru:'Расстояние между A₁(1; 2; 3) и A₂(−1; 1; 1)',kk:'A₁(1; 2; 3) және A₂(−1; 1; 1) арақашықтығы',kind:'dist',vals:{k1:[1,2,3],k2:[-1,1,1]}},
+ {id:'e5',tag:{ru:'22.3 б',kk:'22.3 ә'},ru:'Расстояние между B₁(3; 4; 0) и B₂(3; 1; −4)',kk:'B₁(3; 4; 0) және B₂(3; 1; −4) арақашықтығы',kind:'dist',vals:{k1:[3,4,0],k2:[3,1,-4]}},
+ {id:'e6',tag:'22.6',ru:'Вид треугольника A(0; 0; 2), B(0; 2; 0), C(2; 0; 0)',kk:'A(0; 0; 2), B(0; 2; 0), C(2; 0; 0) үшбұрышының түрі',kind:'tri',vals:{k1:[0,0,2],k2:[0,2,0],k3:[2,0,0]}},
+ {id:'e7',tag:'22.7',ru:'Расстояния от A(1; −2; 3) до осей координат',kk:'A(1; −2; 3) нүктесінен координаталық остерге дейінгі қашықтық',kind:'org',vals:{k1:[1,-2,3]}},
+ {id:'e8',tag:'21.11',ru:'Расстояния от A(−1; 2; 3) до координатных плоскостей',kk:'A(−1; 2; 3) нүктесінен координаталық жазықтықтарға дейінгі қашықтық',kind:'org',vals:{k1:[-1,2,3]}},
+ {id:'e9',tag:{ru:'21.4 а',kk:'21.4 а'},ru:'Середина AB: A(1; 2; 3), B(−1; 0; 1)',kk:'AB ортасы: A(1; 2; 3), B(−1; 0; 1)',kind:'mid',vals:{k1:[1,2,3],k2:[-1,0,1]}},
+ {id:'e10',tag:{ru:'21.4 б',kk:'21.4 ә'},ru:'Середина CD: C(3; 3; 0), D(3; −1; 2)',kk:'CD ортасы: C(3; 3; 0), D(3; −1; 2)',kind:'mid',vals:{k1:[3,3,0],k2:[3,-1,2]}},
+ {id:'e11',tag:'§21',ru:'Конец A(−1; 0; 1), середина C(0; 1; 2): найти B',kk:'Ұшы A(−1; 0; 1), ортасы C(0; 1; 2): B табу',kind:'end',vals:{k1:[-1,0,1],k2:[0,1,2]}},
+ {id:'e12',tag:'§23',ru:'Длина вектора a(2; 3; 6)',kk:'a(2; 3; 6) векторының ұзындығы',kind:'len',vals:{k1:[2,3,6]}},
+ {id:'e13',tag:{ru:'23.2 а',kk:'23.2 а'},ru:'Вектор AB и его длина: A(2; −3; 4), B(−5; 2; −6)',kk:'AB векторы және оның ұзындығы: A(2; −3; 4), B(−5; 2; −6)',kind:'dist',vals:{k1:[2,-3,4],k2:[-5,2,-6]}},
+ {id:'e14',tag:'23.5',ru:'Параллелепипед 4×3×2: диагональ DB₁',kk:'4×3×2 параллелепипед: DB₁ диагоналі',kind:'box',vals:{p:4,q:3,r:2,P:'D',Q:'B1'}}
+];
+
+function cSolve(kind,V){
+ var out={ok:true,res:[],steps:[],pts:[],prims:[],box:null},a=V.k1,b=V.k2,c3=V.k3,i;
+ function bad(ru,kk){out.ok=false;out.err=T2(ru,kk);return out;}
+ var P=function(p,lab,o){return pt(p,lab,{o:o||[11,-10]});};
+ if(kind==='len'){
+  var l2=vdot(a,a),n=Math.sqrt(l2);
+  out.res=[{k:T2('Длина вектора |a|','|a| вектордың ұзындығы'),v:sqrtStr(l2,n),main:1},{k:T2('Квадрат длины |a|²','|a|² ұзындықтың квадраты'),v:fmtN(l2,4)}];
+  out.steps=[T2('Длина вектора a(x; y; z) равна √(x² + y² + z²) (§23).','a(x; y; z) векторының ұзындығы √(x² + y² + z²) (§23).'),
+   T2('|a| = √(('+pn(a[0])+')² + ('+pn(a[1])+')² + ('+pn(a[2])+')²) = √('+qs(a)+') = √'+fmtN(l2,4)+'.','|a| = √(('+pn(a[0])+')² + ('+pn(a[1])+')² + ('+pn(a[2])+')²) = √('+qs(a)+') = √'+fmtN(l2,4)+'.'),
+   T2('Ответ: |a| = '+sqrtStr(l2,n)+'.','Жауабы: |a| = '+sqrtStr(l2,n)+'.')];
+  if(l2<1e-18){out.steps.push(T2('Это нулевой вектор: его длина равна 0.','Бұл нөлдік вектор: оның ұзындығы 0-ге тең.'));}
+  else{
+   var e=a.map(function(x){return x/n;});
+   out.res.push({k:T2('Единичный вектор e = a / |a|','e = a / |a| бірлік векторы'),v:cs(e)});
+   out.steps.push(T2('Единичный вектор того же направления: e = a / |a| = '+cs(e)+', |e| = 1.','Бағыты сол бірлік вектор: e = a / |a| = '+cs(e)+', |e| = 1.'));
+  }
+  out.pts=[a];
+  out.prims=dropPrims(a).concat([ln([0,0,0],a,{c:'accent',w:3,arrow:1,lab:'a',le:'m',lt:.5,lo:[-14,-6]}),P(a,'A',[12,-10])]);
+  return out;
+ }
+ if(kind==='dist'){
+  var v=vsub(b,a),dq=vdot(v,v);
+  out.res=[{k:T2('Расстояние A₁A₂','A₁A₂ арақашықтығы'),v:sqrtStr(dq,Math.sqrt(dq)),main:1},{k:T2('Координаты вектора A₁A₂','A₁A₂ векторының координаталары'),v:cs(v)}];
+  out.steps=[T2('A₁A₂ = √((x₂ − x₁)² + (y₂ − y₁)² + (z₂ − z₁)²) (§22).','A₁A₂ = √((x₂ − x₁)² + (y₂ − y₁)² + (z₂ − z₁)²) (§22).'),
+   T2('A₁A₂ = √(('+pn(b[0])+' − '+pn(a[0])+')² + ('+pn(b[1])+' − '+pn(a[1])+')² + ('+pn(b[2])+' − '+pn(a[2])+')²) = √(('+fmtN(v[0],3)+')² + ('+fmtN(v[1],3)+')² + ('+fmtN(v[2],3)+')²).','A₁A₂ = √(('+pn(b[0])+' − '+pn(a[0])+')² + ('+pn(b[1])+' − '+pn(a[1])+')² + ('+pn(b[2])+' − '+pn(a[2])+')²) = √(('+fmtN(v[0],3)+')² + ('+fmtN(v[1],3)+')² + ('+fmtN(v[2],3)+')²).'),
+   T2('A₁A₂ = √('+qs(v)+') = √'+fmtN(dq,4)+' = '+sqrtStr(dq,Math.sqrt(dq))+'.','A₁A₂ = √('+qs(v)+') = √'+fmtN(dq,4)+' = '+sqrtStr(dq,Math.sqrt(dq))+'.')];
+  if(dq<1e-18)out.steps.push(T2('Точки совпадают: расстояние равно 0.','Нүктелер беттеседі: арақашықтық 0-ге тең.'));
+  out.pts=[a,b];
+  out.prims=spanPrims(a,b).concat([ln(a,b,{c:'accent',w:3.2}),P(a,'A₁',[-14,-8]),P(b,'A₂',[12,-10])]);
+  return out;
+ }
+ if(kind==='mid'){
+  var C=[0,1,2].map(function(k){return (a[k]+b[k])/2;}),d=vsub(b,a),dl=vdot(d,d);
+  out.res=[{k:T2('Середина C отрезка A₁A₂','A₁A₂ кесіндісінің C ортасы'),v:'C'+cs(C),main:1},{k:T2('Длина отрезка A₁A₂','A₁A₂ кесіндісінің ұзындығы'),v:sqrtStr(dl,Math.sqrt(dl))},{k:T2('Длина A₁C = CA₂','A₁C = CA₂ ұзындығы'),v:sqrtStr(dl/4,Math.sqrt(dl)/2)}];
+  out.steps=[T2('Каждая координата середины — среднее арифметическое соответствующих координат концов (§21).','Ортаның әрбір координатасы ұштарының сәйкес координаталарының орта арифметикалық мәніне тең (§21).'),
+   T2('x = ('+fmtN(a[0],3)+' + '+pn(b[0])+')/2 = '+fmtN(C[0],3)+',  y = ('+fmtN(a[1],3)+' + '+pn(b[1])+')/2 = '+fmtN(C[1],3)+',  z = ('+fmtN(a[2],3)+' + '+pn(b[2])+')/2 = '+fmtN(C[2],3)+'.','x = ('+fmtN(a[0],3)+' + '+pn(b[0])+')/2 = '+fmtN(C[0],3)+',  y = ('+fmtN(a[1],3)+' + '+pn(b[1])+')/2 = '+fmtN(C[1],3)+',  z = ('+fmtN(a[2],3)+' + '+pn(b[2])+')/2 = '+fmtN(C[2],3)+'.'),
+   T2('Длина A₁A₂ = √('+qs(d)+') = '+sqrtStr(dl,Math.sqrt(dl))+'; A₁C = CA₂ = A₁A₂ / 2 = '+sqrtStr(dl/4,Math.sqrt(dl)/2)+'.','A₁A₂ ұзындығы = √('+qs(d)+') = '+sqrtStr(dl,Math.sqrt(dl))+'; A₁C = CA₂ = A₁A₂ / 2 = '+sqrtStr(dl/4,Math.sqrt(dl)/2)+'.'),
+   T2('Ответ: C'+cs(C)+'.','Жауабы: C'+cs(C)+'.')];
+  out.pts=[a,b];
+  out.prims=[ln(a,b,{c:'accent',w:2.8}),P(a,'A₁',[-14,-8]),P(b,'A₂',[12,-10]),P(C,'C',[14,-8]),dashed(C,[C[0],C[1],0]),dashed(a,[a[0],a[1],0]),dashed(b,[b[0],b[1],0])];
+  return out;
+ }
+ if(kind==='end'){
+  var Bp=[0,1,2].map(function(k){return 2*b[k]-a[k];}),ab=vsub(Bp,a),abl=vdot(ab,ab);
+  out.res=[{k:T2('Второй конец B','Екінші ұшы B'),v:'B'+cs(Bp),main:1},{k:T2('Длина отрезка AB','AB кесіндісінің ұзындығы'),v:sqrtStr(abl,Math.sqrt(abl))}];
+  out.steps=[T2('C — середина AB, значит, x_C = (x_A + x_B)/2, откуда x_B = 2·x_C − x_A; так же для y и z (§21).','C — AB ортасы, демек x_C = (x_A + x_B)/2, осыдан x_B = 2·x_C − x_A; y және z үшін де осылай (§21).'),
+   T2('x_B = 2·'+pn(b[0])+' − '+pn(a[0])+' = '+fmtN(Bp[0],3)+',  y_B = 2·'+pn(b[1])+' − '+pn(a[1])+' = '+fmtN(Bp[1],3)+',  z_B = 2·'+pn(b[2])+' − '+pn(a[2])+' = '+fmtN(Bp[2],3)+'.','x_B = 2·'+pn(b[0])+' − '+pn(a[0])+' = '+fmtN(Bp[0],3)+',  y_B = 2·'+pn(b[1])+' − '+pn(a[1])+' = '+fmtN(Bp[1],3)+',  z_B = 2·'+pn(b[2])+' − '+pn(a[2])+' = '+fmtN(Bp[2],3)+'.'),
+   T2('Проверка: середина AB = (('+pn(a[0])+' + '+pn(Bp[0])+')/2; ('+pn(a[1])+' + '+pn(Bp[1])+')/2; ('+pn(a[2])+' + '+pn(Bp[2])+')/2) = '+cs(b)+' = C.','Тексеру: AB ортасы = (('+pn(a[0])+' + '+pn(Bp[0])+')/2; ('+pn(a[1])+' + '+pn(Bp[1])+')/2; ('+pn(a[2])+' + '+pn(Bp[2])+')/2) = '+cs(b)+' = C.'),
+   T2('Ответ: B'+cs(Bp)+'.','Жауабы: B'+cs(Bp)+'.')];
+  out.pts=[a,b,Bp];
+  out.prims=[ln(a,b,{c:'a',w:2.6,arrow:1}),ln(b,Bp,{c:'b',w:2.6,arrow:1}),dashed(b,[b[0],b[1],0]),P(a,'A',[-14,-8]),P(b,'C',[14,-8]),P(Bp,'B',[12,-10])];
+  return out;
+ }
+ if(kind==='org'){
+  var x=a[0],y=a[1],z=a[2],o2=x*x+y*y+z*z,dx=y*y+z*z,dy=x*x+z*z,dz=x*x+y*y;
+  out.res=[{k:T2('Расстояние до начала координат OA','Координаталар басына дейінгі OA қашықтығы'),v:sqrtStr(o2,Math.sqrt(o2)),main:1},
+   {k:T2('До осей Ox, Oy, Oz','Ox, Oy, Oz остеріне дейін'),v:sqrtStr(dx,Math.sqrt(dx))+';  '+sqrtStr(dy,Math.sqrt(dy))+';  '+sqrtStr(dz,Math.sqrt(dz))},
+   {k:T2('До плоскостей Oxy, Oxz, Oyz','Oxy, Oxz, Oyz жазықтықтарына дейін'),v:fmtN(Math.abs(z),3)+';  '+fmtN(Math.abs(y),3)+';  '+fmtN(Math.abs(x),3)}];
+  out.steps=[T2('OA = √(x² + y² + z²) = √('+qs(a)+') = '+sqrtStr(o2,Math.sqrt(o2))+' (§22).','OA = √(x² + y² + z²) = √('+qs(a)+') = '+sqrtStr(o2,Math.sqrt(o2))+' (§22).'),
+   T2('Основание перпендикуляра на ось Ox — точка (x; 0; 0), поэтому расстояние до Ox равно √(y² + z²) = √('+fmtN(y*y,3)+' + '+fmtN(z*z,3)+') = '+sqrtStr(dx,Math.sqrt(dx))+'.','Ox осіне түсірілген перпендикулярдың табаны — (x; 0; 0) нүктесі, сондықтан Ox-ке дейінгі қашықтық √(y² + z²) = √('+fmtN(y*y,3)+' + '+fmtN(z*z,3)+') = '+sqrtStr(dx,Math.sqrt(dx))+'.'),
+   T2('Аналогично: до Oy — √(x² + z²) = '+sqrtStr(dy,Math.sqrt(dy))+', до Oz — √(x² + y²) = '+sqrtStr(dz,Math.sqrt(dz))+'.','Осылайша: Oy-ке дейін — √(x² + z²) = '+sqrtStr(dy,Math.sqrt(dy))+', Oz-ке дейін — √(x² + y²) = '+sqrtStr(dz,Math.sqrt(dz))+'.'),
+   T2('Расстояния до координатных плоскостей: до Oxy — |z| = '+fmtN(Math.abs(z),3)+', до Oxz — |y| = '+fmtN(Math.abs(y),3)+', до Oyz — |x| = '+fmtN(Math.abs(x),3)+'.','Координаталық жазықтықтарға дейінгі қашықтық: Oxy-ге — |z| = '+fmtN(Math.abs(z),3)+', Oxz-ке — |y| = '+fmtN(Math.abs(y),3)+', Oyz-ке — |x| = '+fmtN(Math.abs(x),3)+'.')];
+  out.pts=[a];
+  out.prims=dropPrims(a).concat([ln([0,0,0],a,{c:'accent',w:3,arrow:1}),ln(a,[x,0,0],{c:'a',w:2.2}),ln(a,[0,y,0],{c:'b',w:2.2}),ln(a,[0,0,z],{c:'c',w:2.2}),P([x,0,0],'Ax',[0,17]),P([0,y,0],'Ay',[-15,10]),P([0,0,z],'Az',[-16,0]),P(a,'A',[12,-10])]);
+  return out;
+ }
+ if(kind==='cmp'){
+  var qa=vdot(a,a),qb=vdot(b,b),cm=Math.abs(qa-qb)<1e-9*Math.max(1,qa,qb)?0:(qa<qb?-1:1);
+  out.res=[{k:T2('Ближе к началу координат','Координаталар басына жақын'),v:cm===0?T2('обе точки на одном расстоянии','екі нүкте бірдей қашықтықта'):(cm<0?'A':'B'),main:1},{k:'OA',v:sqrtStr(qa,Math.sqrt(qa))},{k:'OB',v:sqrtStr(qb,Math.sqrt(qb))}];
+  out.steps=[T2('Расстояние от точки до начала координат: OA = √(x² + y² + z²) (§22). Сравнивать можно и квадраты расстояний.','Нүктеден координаталар басына дейінгі қашықтық: OA = √(x² + y² + z²) (§22). Қашықтықтардың квадраттарын да салыстыруға болады.'),
+   T2('OA² = '+qs(a)+' = '+fmtN(qa,4)+',  OB² = '+qs(b)+' = '+fmtN(qb,4)+'.','OA² = '+qs(a)+' = '+fmtN(qa,4)+',  OB² = '+qs(b)+' = '+fmtN(qb,4)+'.'),
+   cm===0?T2('OA² = OB², поэтому точки одинаково удалены от начала координат.','OA² = OB², сондықтан нүктелер координаталар басынан бірдей қашықтықта.'):
+    T2('Так как '+fmtN(Math.min(qa,qb),4)+' < '+fmtN(Math.max(qa,qb),4)+', ближе к началу координат точка '+(cm<0?'A':'B')+': '+(cm<0?'OA':'OB')+' = '+(cm<0?sqrtStr(qa,Math.sqrt(qa)):sqrtStr(qb,Math.sqrt(qb)))+'.','Өйткені '+fmtN(Math.min(qa,qb),4)+' < '+fmtN(Math.max(qa,qb),4)+', координаталар басына '+(cm<0?'A':'B')+' нүктесі жақын: '+(cm<0?'OA':'OB')+' = '+(cm<0?sqrtStr(qa,Math.sqrt(qa)):sqrtStr(qb,Math.sqrt(qb)))+'.')];
+  out.pts=[a,b];
+  out.prims=[ln([0,0,0],a,{c:'a',w:2.8,arrow:1}),ln([0,0,0],b,{c:'b',w:2.8,arrow:1}),P(a,'A',[-14,-6]),P(b,'B',[14,10])];
+  return out;
+ }
+ if(kind==='tri'){
+  var sAB=vdot(vsub(b,a),vsub(b,a)),sBC=vdot(vsub(c3,b),vsub(c3,b)),sCA=vdot(vsub(a,c3),vsub(a,c3));
+  var cr=vcross(vsub(b,a),vsub(c3,a));
+  if(vdot(cr,cr)<1e-12)return bad('Точки лежат на одной прямой или совпадают: треугольник не получается.','Нүктелер бір түзуде жатыр немесе беттеседі: үшбұрыш шықпайды.');
+  var sd=[sAB,sBC,sCA].slice().sort(function(p,q){return p-q;}),tol=1e-9*Math.max(1,sd[2]);
+  var eq3=Math.abs(sd[0]-sd[2])<tol,eq2=Math.abs(sd[0]-sd[1])<tol||Math.abs(sd[1]-sd[2])<tol,rt=Math.abs(sd[0]+sd[1]-sd[2])<tol;
+  var tru=rt?(eq2?'прямоугольный равнобедренный':'прямоугольный разносторонний'):(eq3?'равносторонний':(eq2?'равнобедренный':'разносторонний'));
+  var tkk=rt?(eq2?'тікбұрышты тең бүйірлі':'тікбұрышты әртүрлі қабырғалы'):(eq3?'тең қабырғалы':(eq2?'тең бүйірлі':'әртүрлі қабырғалы'));
+  out.res=[{k:T2('Вид треугольника ABC','ABC үшбұрышының түрі'),v:T2(tru,tkk),main:1},{k:T2('Стороны AB, BC, CA','AB, BC, CA қабырғалары'),v:sqrtStr(sAB,Math.sqrt(sAB))+';  '+sqrtStr(sBC,Math.sqrt(sBC))+';  '+sqrtStr(sCA,Math.sqrt(sCA))}];
+  out.steps=[T2('Найдём стороны по формуле расстояния (§22): AB² = '+fmtN(sAB,4)+', BC² = '+fmtN(sBC,4)+', CA² = '+fmtN(sCA,4)+'.','Қабырғаларын арақашықтық формуласымен табамыз (§22): AB² = '+fmtN(sAB,4)+', BC² = '+fmtN(sBC,4)+', CA² = '+fmtN(sCA,4)+'.'),
+   T2('AB = '+sqrtStr(sAB,Math.sqrt(sAB))+', BC = '+sqrtStr(sBC,Math.sqrt(sBC))+', CA = '+sqrtStr(sCA,Math.sqrt(sCA))+'.','AB = '+sqrtStr(sAB,Math.sqrt(sAB))+', BC = '+sqrtStr(sBC,Math.sqrt(sBC))+', CA = '+sqrtStr(sCA,Math.sqrt(sCA))+'.'),
+   eq3?T2('Все три стороны равны: треугольник равносторонний.','Үш қабырғасы да тең: үшбұрыш тең қабырғалы.'):(eq2?T2('Две стороны равны: треугольник равнобедренный.','Екі қабырғасы тең: үшбұрыш тең бүйірлі.'):T2('Все стороны различны: треугольник разносторонний.','Барлық қабырғалары әртүрлі: үшбұрыш әртүрлі қабырғалы.')),
+   rt?T2('Наибольшая сторона: '+fmtN(sd[2],4)+' = '+fmtN(sd[0],4)+' + '+fmtN(sd[1],4)+', по теореме, обратной теореме Пифагора, треугольник прямоугольный.','Ең үлкен қабырғасы: '+fmtN(sd[2],4)+' = '+fmtN(sd[0],4)+' + '+fmtN(sd[1],4)+', Пифагор теоремасына кері теорема бойынша үшбұрыш тікбұрышты.'):T2('Проверим прямой угол: '+fmtN(sd[0],4)+' + '+fmtN(sd[1],4)+' ≠ '+fmtN(sd[2],4)+', треугольник не прямоугольный.','Тік бұрышты тексереміз: '+fmtN(sd[0],4)+' + '+fmtN(sd[1],4)+' ≠ '+fmtN(sd[2],4)+', үшбұрыш тікбұрышты емес.'),
+   T2('Ответ: треугольник '+tru+'.','Жауабы: үшбұрыш '+tkk+'.')];
+  out.pts=[a,b,c3];
+  out.prims=[ln(a,b,{c:'a',w:2.8,lab:lenLab(sAB),le:'m',lt:.5,lo:[12,-8]}),ln(b,c3,{c:'b',w:2.8,lab:lenLab(sBC),le:'m',lt:.5,lo:[14,8]}),ln(c3,a,{c:'c',w:2.8,lab:lenLab(sCA),le:'m',lt:.5,lo:[-12,6]}),P(a,'A',[-14,-8]),P(b,'B',[14,10]),P(c3,'C',[12,-10])];
+  return out;
+ }
+ if(kind==='box'){
+  var p=V.p,q=V.q,r=V.r,Pp=boxV(V.P,p,q,r),Qq=boxV(V.Q,p,q,r),w=vsub(Qq,Pp),wl=vdot(w,w);
+  if(!(p>0&&q>0&&r>0))return bad('Размеры должны быть положительными.','Өлшемдері оң болуы керек.');
+  var nP=vname(V.P),nQ=vname(V.Q);
+  if(V.P===V.Q)return bad('Выберите две разные вершины.','Екі түрлі төбені таңдаңыз.');
+  out.res=[{k:T2('Координаты вершин '+nP+' и '+nQ,nP+' және '+nQ+' төбелерінің координаталары'),v:nP+cs(Pp)+';  '+nQ+cs(Qq)},{k:T2('Координаты вектора '+nP+nQ,nP+nQ+' векторының координаталары'),v:nP+nQ+cs(w),main:1},{k:T2('Длина '+nP+nQ,nP+nQ+' ұзындығы'),v:wl<1e-18?'0':sqrtStr(wl,Math.sqrt(wl))}];
+  out.steps=[T2('Выбираем систему координат: D — начало, DC лежит на Ox, DA на Oy, DD₁ на Oz. Тогда DC = '+fmtN(p,3)+', DA = '+fmtN(q,3)+', DD₁ = '+fmtN(r,3)+'.','Координаталар жүйесін таңдаймыз: D — бас, DC — Ox осінде, DA — Oy осінде, DD₁ — Oz осінде жатыр. Сонда DC = '+fmtN(p,3)+', DA = '+fmtN(q,3)+', DD₁ = '+fmtN(r,3)+'.'),
+   T2('Вершины: D(0; 0; 0), C'+cs([p,0,0])+', A'+cs([0,q,0])+', B'+cs([p,q,0])+'; D₁'+cs([0,0,r])+', C₁'+cs([p,0,r])+', A₁'+cs([0,q,r])+', B₁'+cs([p,q,r])+'.','Төбелері: D(0; 0; 0), C'+cs([p,0,0])+', A'+cs([0,q,0])+', B'+cs([p,q,0])+'; D₁'+cs([0,0,r])+', C₁'+cs([p,0,r])+', A₁'+cs([0,q,r])+', B₁'+cs([p,q,r])+'.'),
+   T2(nP+nQ+' = ('+[0,1,2].map(function(k){return pn(Qq[k])+' − '+pn(Pp[k]);}).join('; ')+') = '+cs(w)+'.',nP+nQ+' = ('+[0,1,2].map(function(k){return pn(Qq[k])+' − '+pn(Pp[k]);}).join('; ')+') = '+cs(w)+'.'),
+   T2('|'+nP+nQ+'| = √('+fmtN(w[0]*w[0],3)+' + '+fmtN(w[1]*w[1],3)+' + '+fmtN(w[2]*w[2],3)+') = '+(wl<1e-18?'0':sqrtStr(wl,Math.sqrt(wl)))+'.','|'+nP+nQ+'| = √('+fmtN(w[0]*w[0],3)+' + '+fmtN(w[1]*w[1],3)+' + '+fmtN(w[2]*w[2],3)+') = '+(wl<1e-18?'0':sqrtStr(wl,Math.sqrt(wl)))+'.')];
+  var Mm=[0,1,2].map(function(k){return (Pp[k]+Qq[k])/2;});
+  out.res.push({k:T2('Середина отрезка '+nP+nQ,nP+nQ+' кесіндісінің ортасы'),v:cs(Mm)});
+  out.steps.push(T2('Середина отрезка '+nP+nQ+': (('+pn(Pp[0])+' + '+pn(Qq[0])+')/2; ('+pn(Pp[1])+' + '+pn(Qq[1])+')/2; ('+pn(Pp[2])+' + '+pn(Qq[2])+')/2) = '+cs(Mm)+'.',nP+nQ+' кесіндісінің ортасы: (('+pn(Pp[0])+' + '+pn(Qq[0])+')/2; ('+pn(Pp[1])+' + '+pn(Qq[1])+')/2; ('+pn(Pp[2])+' + '+pn(Qq[2])+')/2) = '+cs(Mm)+'.'));
+  out.box={p:p,q:q,r:r,P:Pp,Q:Qq};
+  out.pts=[[p,q,r]];
+  out.prims=[ln(Pp,Qq,{c:'accent',w:3.2,arrow:1})];
+  return out;
+ }
+ return bad('Неизвестная задача.','Белгісіз есеп.');
+}
+
+/* scene: display coords -> render coords with automatic scale */
+function cScene(out){
+ var m=1,i;
+ out.pts.forEach(function(p){p.forEach(function(c){m=Math.max(m,Math.abs(c));});});
+ var s=1.2/(m+.2),Lp=Math.min(1.45,(m+.8)*s),Ln=Math.min(.9,(m*.5+.5)*s);
+ var map=function(X){return [X[0]*s,X[2]*s,X[1]*s];};
+ if(out.box){
+  var b=out.box,mx=Math.max(b.p,b.q,b.r),sb=.8/mx,P=boxPolyD(b.p,b.q,b.r,sb);
+  P.ov=axes3((mx+1)*sb*1.1,.5*sb*mx+.3,{noO:1}).concat([ln(map2(b.P,sb),map2(b.Q,sb),{c:'accent',w:3.2,arrow:1})]);
+  return [P];
+ }
+ function map2(X,k){return [X[0]*k,X[2]*k,X[1]*k];}
+ var pr=out.prims.map(function(p){
+  var q={},k;for(k in p)q[k]=p[k];
+  if(p.k==='line'){q.a=map(p.a);q.b=map(p.b);}
+  else if(p.k==='plane'){q.pts=p.pts.map(map);}
+  else if(p.k==='pt'){q.p=map(p.p);}
+  else if(p.k==='ang'){var uu=vunit([p.u[0],p.u[2],p.u[1]]),ww=vunit([p.w[0],p.w[2],p.w[1]]);q.o=map(p.o);q.u=uu;q.w=ww;q.r=Math.min(.3,.35*Math.min(vlen(map(out.pts[0])),vlen(map(out.pts[1])))||.3);}
+  return q;
+ });
+ return axes3(Lp,Ln).concat(pr);
+}
+
+/* ---------- reference data ---------- */
+var GROUPS=[
+ {id:'len',ru:'Длина вектора',kk:'Вектордың ұзындығы'},
+ {id:'dist',ru:'Расстояние между точками',kk:'Нүктелердің арақашықтығы'},
+ {id:'mid',ru:'Середина отрезка',kk:'Кесінді ортасы'},
+ {id:'term',ru:'Термины',kk:'Терминдер'}
+];
+var REF=[
+ {g:'len',s:'|a| = √(x² + y² + z²)',ru:'Длина вектора a(x; y; z).',kk:'a(x; y; z) векторының ұзындығы.',src:'§23'},
+ {g:'len',s:'|a|² = x² + y² + z²',ru:'Квадрат длины вектора равен сумме квадратов его координат.',kk:'Вектор ұзындығының квадраты координаталарының квадраттарының қосындысына тең.',src:'§23'},
+ {g:'len',s:'a² = |a|²',ru:'Скалярный квадрат вектора равен квадрату его длины.',kk:'Вектордың скаляр квадраты оның ұзындығының квадратына тең.',src:'§23'},
+ {g:'len',s:'|λ·a| = |λ|·|a|',ru:'При умножении вектора на число его длина умножается на модуль числа.',kk:'Векторды санға көбейткенде оның ұзындығы санның модуліне көбейтіледі.',src:'§23'},
+ {g:'len',s:'e = a / |a|',ru:'Единичный вектор, сонаправленный с ненулевым вектором a; |e| = 1.',kk:'Нөлдік емес a векторымен бағыттас бірлік вектор; |e| = 1.',src:'§23'},
+ {g:'len',s:'|i| = |j| = |k| = 1',ru:'Координатные векторы — единичные.',kk:'Координаталық векторлар — бірлік векторлар.',src:'§23'},
+ {g:'len',s:'|a| = 0 ⇔ a = 0',ru:'Длина вектора равна нулю только для нулевого вектора.',kk:'Вектордың ұзындығы тек нөлдік вектор үшін ғана нөлге тең.',src:'§23'},
+ {g:'len',s:'A₁A₂ = (x₂−x₁; y₂−y₁; z₂−z₁)',ru:'Координаты вектора по координатам начала A₁ и конца A₂.',kk:'Вектордың координаталары оның басы A₁ мен ұшы A₂ координаталары бойынша.',src:'§23'},
+ {g:'dist',s:'A₁A₂ = √((x₂−x₁)² + (y₂−y₁)² + (z₂−z₁)²)',ru:'Расстояние между точками A₁(x₁; y₁; z₁) и A₂(x₂; y₂; z₂).',kk:'A₁(x₁; y₁; z₁) және A₂(x₂; y₂; z₂) нүктелерінің арақашықтығы.',src:'§22'},
+ {g:'dist',s:'A₁A₂ = |A₁A₂|',ru:'Расстояние между точками равно длине вектора A₁A₂.',kk:'Нүктелердің арақашықтығы A₁A₂ векторының ұзындығына тең.',src:'§22'},
+ {g:'dist',s:'OA = √(x² + y² + z²)',ru:'Расстояние от точки A(x; y; z) до начала координат.',kk:'A(x; y; z) нүктесінен координаталар басына дейінгі қашықтық.',src:'§22'},
+ {g:'dist',s:'ρ(A, Ox) = √(y² + z²)',ru:'Расстояние от точки A(x; y; z) до оси Ox.',kk:'A(x; y; z) нүктесінен Ox осіне дейінгі қашықтық.',src:'§22'},
+ {g:'dist',s:'ρ(A, Oy) = √(x² + z²)',ru:'Расстояние от точки A(x; y; z) до оси Oy.',kk:'A(x; y; z) нүктесінен Oy осіне дейінгі қашықтық.',src:'§22'},
+ {g:'dist',s:'ρ(A, Oz) = √(x² + y²)',ru:'Расстояние от точки A(x; y; z) до оси Oz.',kk:'A(x; y; z) нүктесінен Oz осіне дейінгі қашықтық.',src:'§22'},
+ {g:'dist',s:'ρ(A, Oxy) = |z|',ru:'Расстояние до плоскости Oxy; до Oxz — |y|, до Oyz — |x|.',kk:'Oxy жазықтығына дейінгі қашықтық; Oxz-ке — |y|, Oyz-ке — |x|.',src:'§22'},
+ {g:'dist',s:'√((x₂−x₁)² + (y₂−y₁)²)',ru:'Расстояние между точками плоскости Oxy (z₁ = z₂ = 0).',kk:'Oxy жазықтығының нүктелері арасындағы қашықтық (z₁ = z₂ = 0).',src:'§22'},
+ {g:'dist',s:'|x₂ − x₁|',ru:'Расстояние между точками оси Ox.',kk:'Ox осінің нүктелері арасындағы қашықтық.',src:'§22'},
+ {g:'dist',s:'c² = a² + b²',ru:'Треугольник с наибольшей стороной c прямоугольный (теорема, обратная теореме Пифагора).',kk:'Ең үлкен қабырғасы c болатын үшбұрыш тікбұрышты (Пифагор теоремасына кері теорема).',src:'§22'},
+ {g:'dist',s:'DB₁ = √(a² + b² + c²)',ru:'Диагональ прямоугольного параллелепипеда с измерениями a, b, c.',kk:'Өлшемдері a, b, c болатын тікбұрышты параллелепипедтің диагоналі.',src:'§23'},
+ {g:'mid',s:'C((x₁+x₂)/2; (y₁+y₂)/2; (z₁+z₂)/2)',ru:'Середина отрезка A₁A₂ с концами A₁(x₁; y₁; z₁), A₂(x₂; y₂; z₂).',kk:'Ұштары A₁(x₁; y₁; z₁), A₂(x₂; y₂; z₂) болатын A₁A₂ кесіндісінің ортасы.',src:'§21'},
+ {g:'mid',s:'x₀ = (x₁ + x₂)/2',ru:'Каждая координата середины — среднее арифметическое координат концов.',kk:'Ортаның әрбір координатасы — ұштарының координаталарының орта арифметикалық мәні.',src:'§21'},
+ {g:'mid',s:'B(2x₀ − x₁; 2y₀ − y₁; 2z₀ − z₁)',ru:'Второй конец отрезка по концу A(x₁; y₁; z₁) и середине C(x₀; y₀; z₀).',kk:'A(x₁; y₁; z₁) ұшы және C(x₀; y₀; z₀) ортасы бойынша кесіндінің екінші ұшы.',src:'§21'},
+ {g:'mid',s:'A₁C = CA₂ = A₁A₂ / 2',ru:'Середина делит отрезок пополам.',kk:'Орта кесіндіні тең екіге бөледі.',src:'§21'},
+ {g:'mid',s:'M(a/2; b/2; c/2)',ru:'Центр прямоугольного параллелепипеда (D — начало координат): середина диагонали DB₁.',kk:'Тікбұрышты параллелепипедтің центрі (D — координаталар басы): DB₁ диагоналінің ортасы.',src:'§21'}
+];
+var TERMS=[
+ ['длина вектора','вектордың ұзындығы','§23'],
+ ['расстояние между точками','нүктелердің арақашықтығы','§22'],
+ ['единичный вектор','бірлік вектор','§23'],
+ ['нулевой вектор','нөлдік вектор','§23'],
+ ['середина отрезка','кесіндінің ортасы','§21'],
+ ['диагональ параллелепипеда','параллелепипедтің диагоналі','§23'],
+ ['медиана треугольника','үшбұрыштың медианасы','§21'],
+ ['равносторонний треугольник','тең қабырғалы үшбұрыш','§22'],
+ ['равнобедренный треугольник','тең бүйірлі үшбұрыш','§22'],
+ ['прямоугольный треугольник','тікбұрышты үшбұрыш','§22'],
+ ['теорема Пифагора','Пифагор теоремасы','§22'],
+ ['ортогональная проекция','ортогональ проекция','§21'],
+ ['симметрия относительно точки','нүктеге қатысты симметрия','§21'],
+ ['координатная ось','координаталық ось','§21'],
+ ['координатная плоскость','координаталық жазықтық','§21'],
+ ['координаты вектора','вектордың координаталары','§23']
+];
+TERMS.forEach(function(t){REF.push({g:'term',t:1,ru:t[0],kk:t[1],src:t[2]});});
+
+/* ---------- quiz ---------- */
+function Q(qru,qkk,o,wru,wkk,okk){return {q:{ru:qru,kk:qkk},o:{ru:o,kk:okk||o},a:0,w:{ru:wru,kk:wkk}};}
+var QUIZ=[
+ Q('Длина вектора a(2; 3; 6) равна:','a(2; 3; 6) векторының ұзындығы:',['7','11','√11','5'],'|a| = √(4 + 9 + 36) = √49 = 7 (§23).','|a| = √(4 + 9 + 36) = √49 = 7 (§23).'),
+ Q('Найдите длину вектора a(−1; 2; 2).','a(−1; 2; 2) векторының ұзындығын табыңдар.',['3','5','1','9'],'|a| = √(1 + 4 + 4) = 3 (§23).','|a| = √(1 + 4 + 4) = 3 (§23).'),
+ Q('Найдите расстояние между точками A₁(1; 2; 3) и A₂(−1; 1; 1).','A₁(1; 2; 3) және A₂(−1; 1; 1) нүктелерінің арақашықтығын табыңдар.',['3','9','√5','5'],'A₁A₂ = √(4 + 1 + 4) = 3 (§22, задача 22.3 а).','A₁A₂ = √(4 + 1 + 4) = 3 (§22, 22.3 а-есеп).'),
+ Q('Найдите расстояние между точками B₁(3; 4; 0) и B₂(3; 1; −4).','B₁(3; 4; 0) және B₂(3; 1; −4) нүктелерінің арақашықтығын табыңдар.',['5','7','√7','25'],'B₁B₂ = √(0 + 9 + 16) = 5 (§22, задача 22.3 б).','B₁B₂ = √(0 + 9 + 16) = 5 (§22, 22.3 ә-есеп).'),
+ Q('Найдите середину отрезка AB, где A(1; 2; 3), B(−1; 0; 1).','A(1; 2; 3), B(−1; 0; 1) болғанда AB кесіндісінің ортасын табыңдар.',['(0; 1; 2)','(0; 2; 4)','(1; 1; 2)','(2; 2; 4)'],'((1 − 1)/2; (2 + 0)/2; (3 + 1)/2) = (0; 1; 2) (§21, задача 21.4).','((1 − 1)/2; (2 + 0)/2; (3 + 1)/2) = (0; 1; 2) (§21, 21.4-есеп).'),
+ Q('Точка C(1; 2; 3) — середина отрезка AB, A(3; 1; 5). Найдите координаты точки B.','C(1; 2; 3) нүктесі AB кесіндісінің ортасы, A(3; 1; 5). B нүктесінің координаталарын табыңдар.',['(−1; 3; 1)','(2; 1,5; 4)','(5; 0; 7)','(−2; 1; −2)'],'B = (2·1 − 3; 2·2 − 1; 2·3 − 5) = (−1; 3; 1) (§21).','B = (2·1 − 3; 2·2 − 1; 2·3 − 5) = (−1; 3; 1) (§21).'),
+ Q('Найдите расстояние от точки A(3; 4; 0) до начала координат.','A(3; 4; 0) нүктесінен координаталар басына дейінгі қашықтықты табыңдар.',['5','7','1','25'],'OA = √(9 + 16 + 0) = 5 (§22, задача 22.1 а).','OA = √(9 + 16 + 0) = 5 (§22, 22.1 а-есеп).'),
+ Q('Какая из точек A(3; 1; 5) или B(1; −1; 6) расположена ближе к началу координат?','A(3; 1; 5) немесе B(1; −1; 6) нүктелерінің қайсысы координаталар басына жақын орналасқан?',['A','B','обе на одном расстоянии','определить нельзя'],'OA² = 9 + 1 + 25 = 35, OB² = 1 + 1 + 36 = 38; 35 < 38, ближе A (§22, задача 22.2).','OA² = 9 + 1 + 25 = 35, OB² = 1 + 1 + 36 = 38; 35 < 38, A жақынырақ (§22, 22.2-есеп).',['A','B','екеуі бірдей қашықтықта','анықтау мүмкін емес']),
+ Q('Расстояние от точки A(1; −2; 3) до оси Oz равно:','A(1; −2; 3) нүктесінен Oz осіне дейінгі қашықтық:',['√5','√13','√10','3'],'До оси Oz: √(x² + y²) = √(1 + 4) = √5 (§22, задача 22.7).','Oz осіне дейін: √(x² + y²) = √(1 + 4) = √5 (§22, 22.7-есеп).'),
+ Q('Расстояние от точки A(−1; 2; 3) до координатной плоскости Oxy равно:','A(−1; 2; 3) нүктесінен Oxy координаталық жазықтығына дейінгі қашықтық:',['3','2','1','√14'],'До плоскости Oxy — |z| = 3 (задача 21.11).','Oxy жазықтығына дейін — |z| = 3 (21.11-есеп).'),
+ Q('Определите вид треугольника с вершинами A(0; 0; 2), B(0; 2; 0), C(2; 0; 0).','Төбелері A(0; 0; 2), B(0; 2; 0), C(2; 0; 0) болатын үшбұрыштың түрін анықтаңдар.',['равносторонний','прямоугольный','разносторонний','равнобедренный, не равносторонний'],'AB = BC = CA = √8 = 2√2: все стороны равны (§22, задача 22.6).','AB = BC = CA = √8 = 2√2: барлық қабырғалары тең (§22, 22.6-есеп).',['тең қабырғалы','тікбұрышты','әртүрлі қабырғалы','тең бүйірлі, бірақ тең қабырғалы емес']),
+ Q('Измерения прямоугольного параллелепипеда равны 1, 4 и 8. Длина его диагонали:','Тікбұрышты параллелепипедтің өлшемдері 1, 4 және 8. Диагоналінің ұзындығы:',['9','13','√13','7'],'d = √(1 + 16 + 64) = √81 = 9 (§23).','d = √(1 + 16 + 64) = √81 = 9 (§23).'),
+ Q('a(1; 2; 2). Чему равна длина вектора −2·a?','a(1; 2; 2). −2·a векторының ұзындығы неге тең?',['6','−6','3','9'],'|−2·a| = |−2|·|a| = 2·3 = 6 (§23).','|−2·a| = |−2|·|a| = 2·3 = 6 (§23).'),
+ Q('D(0; 0; 0), DC = 4, DA = 3, DD₁ = 2. Координаты центра параллелепипеда (середины DB₁):','D(0; 0; 0), DC = 4, DA = 3, DD₁ = 2. Параллелепипедтің центрінің (DB₁ ортасының) координаталары:',['(2; 1,5; 1)','(4; 3; 2)','(1; 1,5; 2)','(2; 3; 1)'],'B₁(4; 3; 2), середина DB₁ = (2; 1,5; 1) (§21).','B₁(4; 3; 2), DB₁ ортасы = (2; 1,5; 1) (§21).')
+];
+QUIZ.forEach(function(q,i){
+ var k=(i*3+1)%4;if(!k)return;
+ ['ru','kk'].forEach(function(L){var o=q.o[L],n=[],j;for(j=0;j<4;j++)n[(j+k)%4]=o[j];q.o[L]=n;});
+ q.a=(q.a+k)%4;
+});
+
+/* ---------- state ---------- */
+/* ---------- state ---------- */
+var pref=LS.get('coord2.prefs')||{};
+var TABS=['len','dist','mid','sol','ref','qz'];
+var state={
+ lang:(pref.lang==='kk'||pref.lang==='ru')?pref.lang:'kk',
+ theme:(pref.theme==='dark'||pref.theme==='light')?pref.theme:((window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light'),
+ tab:(TABS.indexOf(pref.tab)>=0)?pref.tab:'len',
+ size:(pref.size===0||pref.size===1||pref.size===2)?pref.size:1,
+ views:{}, quiz:{i:0,sel:null,score:0,done:false}, ref:{q:'',g:'all'}
+};
+var UVALS=[1.08,1.36,1.7];
+function applySize(){
+ var u=UVALS[state.size],r=document.documentElement.style,t=T[state.lang];
+ r.setProperty('--u',u);r.setProperty('--k',1+(u-1)*.6);r.setProperty('--ul',1+(u-1)*.5);
+ $('#sizeSeg').setAttribute('aria-label',t.sizeGroup);
+ $$('#sizeSeg button').forEach(function(b){var i=+b.dataset.size;b.setAttribute('aria-pressed',String(i===state.size));b.setAttribute('aria-label',t.sizeNames[i]);b.title=t.sizeNames[i];});
+}
+function savePrefs(){LS.set('coord2.prefs',{lang:state.lang,theme:state.theme,tab:state.tab,size:state.size});}
+function view(id){
+ if(!state.views[id]){var it=ITEMS[id];state.views[id]={yaw:it.v0?it.v0.yaw:-.55,pitch:it.v0?it.v0.pitch:.5,mode:it.def,n:it.slider?it.slider.def:0};}
+ return state.views[id];
+}
+function tagOf(id){var t=ITEMS[id].tag;return typeof t==='string'?t:t[state.lang];}
+
+/* ---------- 3D rendering ---------- */
+var S=108,CX=210,CY=172;
+function proj(p,v){
+ var cy=Math.cos(v.yaw),sy=Math.sin(v.yaw),cp=Math.cos(v.pitch),sp=Math.sin(v.pitch);
+ var x1=p[0]*cy+p[2]*sy,z1=-p[0]*sy+p[2]*cy;
+ var y2=p[1]*cp-z1*sp,z2=p[1]*sp+z1*cp;
+ return {x:CX+x1*S,y:CY-y2*S,z:z2};
+}
+function f1(n){return n.toFixed(1);}
+function polySVG(p,v){
+ var cy=Math.cos(v.yaw),sy=Math.sin(v.yaw),cp=Math.cos(v.pitch),sp=Math.sin(v.pitch),i,R,c=[0,0,0];
+ R=p.V.map(function(q){var x1=q[0]*cy+q[2]*sy,z1=-q[0]*sy+q[2]*cy;return [x1,q[1]*cp-z1*sp,q[1]*sp+z1*cp];});
+ R.forEach(function(r){c[0]+=r[0];c[1]+=r[1];c[2]+=r[2];});
+ c=c.map(function(x){return x/R.length;});
+ var front=p.F.map(function(f){
+  var a=R[f[0]],b=R[f[1]],d=R[f[2]],u=[b[0]-a[0],b[1]-a[1],b[2]-a[2]],w=[d[0]-a[0],d[1]-a[1],d[2]-a[2]];
+  var n=[u[1]*w[2]-u[2]*w[1],u[2]*w[0]-u[0]*w[2],u[0]*w[1]-u[1]*w[0]],fc=[0,0,0];
+  f.forEach(function(k){fc[0]+=R[k][0];fc[1]+=R[k][1];fc[2]+=R[k][2];});
+  fc=fc.map(function(x){return x/f.length;});
+  if(n[0]*(fc[0]-c[0])+n[1]*(fc[1]-c[1])+n[2]*(fc[2]-c[2])<0)n=[-n[0],-n[1],-n[2]];
+  return n[2]>1e-6;
+ });
+ var sc=R.map(function(r){return {x:CX+r[0]*S,y:CY-r[1]*S};});
+ var edges={},vis=R.map(function(){return false;});
+ p.F.forEach(function(f,fi){
+  for(i=0;i<f.length;i++){
+   var a=f[i],b=f[(i+1)%f.length],k=a<b?a+'-'+b:b+'-'+a;
+   if(!edges[k])edges[k]={a:a,b:b,vis:false};
+   if(front[fi]){edges[k].vis=true;vis[a]=true;vis[b]=true;}
+  }
+ });
+ var hid='',shown='',fills='',labels='',k,e;
+ for(k in edges){
+  e=edges[k];
+  var seg='<line x1="'+f1(sc[e.a].x)+'" y1="'+f1(sc[e.a].y)+'" x2="'+f1(sc[e.b].x)+'" y2="'+f1(sc[e.b].y)+'"';
+  if(e.vis)shown+=seg+' class="ln ln-ink" stroke-width="2"/>';
+  else hid+=seg+' class="ln ln-faint" stroke-width="1.3" stroke-dasharray="5 5"/>';
+ }
+ p.F.forEach(function(f,fi){
+  if(front[fi])fills+='<polygon class="pl-f" points="'+f.map(function(q){return f1(sc[q].x)+','+f1(sc[q].y);}).join(' ')+'"/>';
+ });
+ var mx=0,my=0;sc.forEach(function(s){mx+=s.x;my+=s.y;});mx/=sc.length;my/=sc.length;
+ sc.forEach(function(s,idx){
+  var dx=s.x-mx,dy=s.y-my,d=Math.sqrt(dx*dx+dy*dy)||1;
+  labels+='<text class="lbl'+(vis[idx]?'':' lbl-h')+'" x="'+f1(Math.max(12,Math.min(408,s.x+dx/d*15)))+'" y="'+f1(Math.max(12,Math.min(288,s.y+dy/d*15)))+'">'+p.names[idx]+'</text>';
+  if(vis[idx])labels+='<circle class="pt" cx="'+f1(s.x)+'" cy="'+f1(s.y)+'" r="3.6"/>';
+ });
+ return hid+fills+shown+(p.ov?renderPrims(p.ov,v):'')+labels;
+}
+function clampX(x){return Math.max(14,Math.min(406,x));}
+function clampY(y){return Math.max(14,Math.min(286,y));}
+function renderPrims(prims,v){
+ var items=prims.map(function(p){
+  if(p.k==='plane'){var q=p.pts.map(function(x){return proj(x,v)});return {p:p,q:q,z:q.reduce(function(s,a){return s+a.z},0)/q.length};}
+  if(p.k==='line'){var a=proj(p.a,v),b=proj(p.b,v);return {p:p,a:a,b:b,z:(a.z+b.z)/2+.25};}
+  if(p.k==='ang'){var o=proj(p.o,v);return {p:p,q:o,z:o.z+.35};}
+  var r=proj(p.p,v);return {p:p,q:r,z:r.z+.5};
+ }).sort(function(x,y){return x.z-y.z});
+ var shapes='',labels='';
+ function P2(a){return a.map(function(q){return f1(q.x)+','+f1(q.y);}).join(' ');}
+ items.forEach(function(it){
+  var p=it.p;
+  if(p.k==='plane'){
+   shapes+='<polygon class="pl-'+p.col+'" points="'+P2(it.q)+'"/>';
+   if(p.lab){
+    var cx=0,cy=0;it.q.forEach(function(a){cx+=a.x;cy+=a.y});cx/=it.q.length;cy/=it.q.length;
+    var c=it.q[p.li],dx=c.x-cx,dy=c.y-cy,d=Math.sqrt(dx*dx+dy*dy)||1;
+    labels+='<text class="lbl lbl-pl lbl-'+p.col+'" x="'+f1(clampX(c.x+dx/d*15))+'" y="'+f1(clampY(c.y+dy/d*15))+'">'+p.lab+'</text>';
+   }
+  }else if(p.k==='line'){
+   shapes+='<line class="ln ln-'+p.c+'" x1="'+f1(it.a.x)+'" y1="'+f1(it.a.y)+'" x2="'+f1(it.b.x)+'" y2="'+f1(it.b.y)+'" stroke-width="'+p.w+'"'+(p.d?' stroke-dasharray="5 5"':'')+'/>';
+   if(p.arrow){
+    var adx=it.b.x-it.a.x,ady=it.b.y-it.a.y,adl=Math.sqrt(adx*adx+ady*ady);
+    if(adl>1.5){var aux=adx/adl,auy=ady/adl,ahl=Math.min(12*(typeof ARW==='number'?ARW:1),adl*.7),ahw=ahl*.4,bx=it.b.x,by=it.b.y;
+     shapes+='<polygon class="ah ah-'+p.c+'" points="'+f1(bx)+','+f1(by)+' '+f1(bx-aux*ahl-auy*ahw)+','+f1(by-auy*ahl+aux*ahw)+' '+f1(bx-aux*ahl+auy*ahw)+','+f1(by-auy*ahl-aux*ahw)+'"/>';}
+   }
+   if(p.lab){
+    var lt=p.lt||.5,e=p.le==='a'?it.a:(p.le==='m'?{x:it.a.x+(it.b.x-it.a.x)*lt,y:it.a.y+(it.b.y-it.a.y)*lt}:it.b);
+    labels+='<text class="lbl lbl-ln" x="'+f1(clampX(e.x+p.lo[0]))+'" y="'+f1(clampY(e.y+p.lo[1]))+'">'+p.lab+'</text>';
+   }
+  }else if(p.k==='ang'){
+   var cs=[],th=Math.acos(Math.max(-1,Math.min(1,vdot(p.u,p.w)))),i,N=14,t,d2,ok=true;
+   if(p.sq){
+    var pa=vadd(p.o,vmul(p.u,p.r)),pb=vadd(pa,vmul(p.w,p.r)),pc=vadd(p.o,vmul(p.w,p.r));
+    var qs=[p.o,pa,pb,pc].map(function(x){return proj(x,v);});
+    shapes+='<polygon class="ang-f" points="'+P2(qs)+'"/><polyline class="ang-s" points="'+P2(qs.slice(1))+'"/>';
+   }else if(th>1e-3&&th<Math.PI-1e-3){
+    for(i=0;i<=N;i++){t=i/N;d2=vadd(vmul(p.u,Math.sin((1-t)*th)/Math.sin(th)),vmul(p.w,Math.sin(t*th)/Math.sin(th)));cs.push(proj(vadd(p.o,vmul(d2,p.r)),v));}
+    shapes+='<polygon class="ang-f" points="'+f1(it.q.x)+','+f1(it.q.y)+' '+P2(cs)+'"/><polyline class="ang-s" points="'+P2(cs)+'"/>';
+   }else ok=false;
+   if(p.lab&&ok){
+    var bs=vadd(p.u,p.w);
+    if(vlen(bs)>1e-3){var lp=proj(vadd(p.o,vmul(vunit(bs),p.r*(p.sq?2.3:1.55))),v);
+     labels+='<text class="lbl lbl-ang lbl-b" x="'+f1(clampX(lp.x))+'" y="'+f1(clampY(lp.y))+'">'+p.lab+'</text>';}
+   }
+  }else{
+   shapes+='<circle class="pt" cx="'+f1(it.q.x)+'" cy="'+f1(it.q.y)+'" r="4.6"/>';
+   labels+='<text class="lbl" x="'+f1(clampX(it.q.x+p.o[0]))+'" y="'+f1(clampY(it.q.y+p.o[1]))+'">'+p.lab+'</text>';
+  }
+ });
+ return shapes+labels;
+}
+function renderScene(prims,v){
+ var polyP=prims.filter(function(p){return p.k==='poly';})[0];
+ if(polyP)return polySVG(polyP,v);
+ return renderPrims(prims,v);
+}
+function drawFig(id){
+ if(id==='sol'){drawSol();return;}
+ var svg=$('svg[data-fig="'+id+'"]');if(!svg)return;
+ var it=ITEMS[id],v=view(id),L=state.lang,t=T[L];
+ svg.innerHTML=renderScene(it.build(v.mode,v),v);
+ var cap=$('[data-cap="'+id+'"]');
+ if(cap){
+  if(it.dyn)cap.textContent=it.dyn(v,L);
+  else{var m=it.modes.filter(function(x){return x.id===v.mode})[0];if(m&&m.cap)cap.textContent=m.cap[L];}
+ }
+ var cn=$('[data-counts="'+id+'"]');
+ if(cn&&it.poly){
+  var c=polyCounts(it.poly(v));
+  cn.innerHTML=c.map(function(x,i){return '<div class="count"><span>'+t.cntNames[i]+' ('+t.cntLetters[i]+')</span><b>'+x+'</b></div>';}).join('');
+ }
+}
+
+/* ---------- views ---------- */
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');}
+function cardHTML(id){
+ var it=ITEMS[id],L=state.lang,t=T[L],v=view(id),modes='';
+ if(it.modes.length>1){
+  modes='<div class="modes" role="group">'+it.modes.map(function(m){
+   return '<button type="button" class="mode" data-act="mode" data-id="'+id+'" data-mode="'+m.id+'" aria-pressed="'+(v.mode===m.id)+'">'+m[L]+'</button>';
+  }).join('')+'</div>';
+ }
+ var slider='';
+ if(it.slider){
+  slider='<label class="slider" for="n-'+id+'"><span>'+(it.slider.sym||'n')+' = <b id="nv-'+id+'">'+(it.slider.fmt?it.slider.fmt(v.n):v.n)+'</b>'+(it.slider.unit||'')+'</span><input type="range" id="n-'+id+'" data-id="'+id+'" min="'+it.slider.min+'" max="'+it.slider.max+'" value="'+v.n+'"></label>';
+ }
+ var proof='';
+ if(it.proof){
+  proof='<details class="proof"><summary>'+t.proof+'</summary><ol>'+it.proof.map(function(s){
+   return '<li>'+esc(s[L])+(s.ref?s.ref.map(function(r){return '<span class="ref">'+esc(tagOf(r))+'</span>';}).join(''):'')+'</li>';
+  }).join('')+'</ol></details>';
+ }
+ var defs=it.defs?'<ul class="defs">'+it.defs[L].map(function(d){return '<li>'+esc(d)+'</li>';}).join('')+'</ul>':'';
+ var extra=it.extra?'<p class="extra"><b>'+t.more+'.</b> '+esc(it.extra[L])+'</p>':'';
+ return '<article class="card" id="card-'+id+'">'+
+  '<div class="c-text">'+
+   '<div class="c-head"><span class="tag">'+esc(tagOf(id))+'</span><h2>'+it.title[L]+'</h2></div>'+
+   '<p class="stmt">'+it.stmt[L]+'</p>'+defs+
+   '<p class="sym"><small>'+t.sym+'</small>'+it.sym[L]+'</p>'+extra+
+   '<div class="real"><small>'+t.real+'</small><p>'+it.real[L]+'</p></div>'+
+   proof+
+  '</div>'+
+  '<div class="c-fig">'+
+   '<figure class="fig"><svg data-fig="'+id+'" viewBox="0 0 420 300" role="img" tabindex="0" aria-label="'+esc(it.title[L])+'"></svg>'+
+   '<figcaption data-cap="'+id+'"></figcaption></figure>'+
+   (it.counts?'<div class="counts" data-counts="'+id+'"></div>':'')+
+   modes+slider+
+   '<div class="fig-foot"><span>'+t.hint+'</span><button type="button" class="link-btn" data-act="reset" data-id="'+id+'">'+t.reset+'</button></div>'+
+   '<div class="work" aria-hidden="true"><small>'+(state.lang==='ru'?'Место для решения':'Шешуге арналған орын')+'</small></div>'+
+  '</div></article>';
+}
+function legendHTML(){
+ var L=state.lang;
+ return '<details class="legend"><summary>'+T[L].notation+'</summary><ul class="legend-g">'+
+  LEGEND.map(function(r){return '<li><b>'+r[0]+'</b><span>'+r[1][L]+'</span></li>'}).join('')+'</ul></details>';
+}
+function pick(x,L){return (x&&typeof x==='object')?x[L]:x;}
+function refMatch(e,L,q){
+ if(!q)return true;
+ var hay=[pick(e.s,'ru'),pick(e.s,'kk'),e.ru,e.kk,pick(e.ex,'ru'),pick(e.ex,'kk')].join(' ').toLowerCase();
+ return hay.indexOf(q.toLowerCase())>=0;
+}
+function refCard(e,L,t){
+ var top;
+ if(e.t){
+  var other=L==='ru'?'kk':'ru';
+  top='<div class="rc-top"><div class="rc-term">'+esc(e[L])+'</div><span class="rc-src">'+esc(e.src)+'</span></div><p class="rc-alt">'+(other==='ru'?'рус':'қаз')+': '+esc(e[other])+'</p>';
+  return '<div class="rc">'+top+'</div>';
+ }
+ var s=pick(e.s,L),ex=pick(e.ex,L),src=pick(e.src,L);
+ return '<div class="rc"><div class="rc-top"><button type="button" class="symbtn" data-act="copy" data-sym="'+esc(s).replace(/"/g,'&quot;')+'" aria-label="'+esc(t.copied)+': '+esc(s).replace(/"/g,'&quot;')+'">'+esc(s)+'</button>'+
+  '<span class="rc-src">'+(src==='app'?(L==='ru'?'в приложении':'қосымшада'):esc(src))+'</span></div>'+
+  '<p class="rc-txt">'+esc(e[L])+'</p>'+(ex?'<p class="rc-ex">'+esc(ex)+'</p>':'')+'</div>';
+}
+function refGridHTML(){
+ var L=state.lang,t=T[L],q=state.ref.q.trim(),g=state.ref.g,out='',any=false;
+ GROUPS.forEach(function(gr){
+  if(g!=='all'&&g!==gr.id)return;
+  var list=REF.filter(function(e){return e.g===gr.id&&refMatch(e,L,q);});
+  if(!list.length)return;
+  any=true;
+  out+='<section class="rgroup"><h3>'+gr[L]+'</h3><div class="ref-grid">'+list.map(function(e){return refCard(e,L,t);}).join('')+'</div></section>';
+ });
+ return any?out:'<p class="empty">'+t.empty+'</p>';
+}
+function refHTML(){
+ var L=state.lang,t=T[L];
+ var chips='<button type="button" class="mode" data-act="rgroup" data-g="all" aria-pressed="'+(state.ref.g==='all')+'">'+t.all+'</button>'+
+  GROUPS.map(function(gr){return '<button type="button" class="mode" data-act="rgroup" data-g="'+gr.id+'" aria-pressed="'+(state.ref.g===gr.id)+'">'+gr[L]+'</button>';}).join('');
+ return '<div class="stack"><p class="intro">'+t.intro.ref+'</p>'+
+  '<div class="ref-tools"><input type="search" id="refq" class="search" placeholder="'+esc(t.search)+'" value="'+esc(state.ref.q).replace(/"/g,'&quot;')+'" autocomplete="off"><div class="chips" role="group">'+chips+'</div></div>'+
+  '<div id="refGrid" style="display:grid;gap:18px">'+refGridHTML()+'</div><p class="src-note">'+t.srcNote+'</p></div>';
+}
+function quizHTML(){
+ var L=state.lang,t=T[L],q=state.quiz,n=QUIZ.length;
+ if(q.done){
+  var msg=q.score>=n-1?t.r5:(q.score>=Math.ceil(n*.6)?t.r3:t.r0);
+  return '<section class="card quiz"><div class="q-n">'+t.result+'</div><div class="score">'+q.score+' '+t.of+' '+n+'</div><p class="q-t">'+msg+'</p>'+
+   '<button type="button" class="btn" data-act="qrestart">'+t.again+'</button></section>';
+ }
+ var it=QUIZ[q.i],dots='',i;
+ for(i=0;i<n;i++)dots+='<i class="'+(i<=q.i?'on':'')+'"></i>';
+ var opts=it.o[L].map(function(o,i){
+  var cls='opt',dis='';
+  if(q.sel!==null){dis=' disabled';if(i===it.a)cls+=' ok';else if(i===q.sel)cls+=' bad';}
+  return '<button type="button" class="'+cls+'" data-act="qpick" data-i="'+i+'"'+dis+'><span class="k">'+String.fromCharCode(65+i)+'</span><span>'+o+'</span></button>';
+ }).join('');
+ var fb='';
+ if(q.sel!==null){
+  var good=q.sel===it.a;
+  fb='<p class="fb" role="status"><b class="'+(good?'ok':'bad')+'">'+(good?t.ok:t.bad)+'</b> '+it.w[L]+'</p>'+
+   '<button type="button" class="btn" data-act="qnext">'+(q.i===n-1?t.finish:t.next)+'</button>';
+ }
+ return '<section class="card quiz"><div class="prog" aria-hidden="true">'+dots+'</div>'+
+  '<div class="q-n">'+t.qOf+' '+(q.i+1)+' '+t.of+' '+n+'</div><h2 class="q-t">'+it.q[L]+'</h2><div class="opts">'+opts+'</div>'+fb+'</section>';
+}
+function renderView(){
+ var L=state.lang,t=T[L],h='',tab=state.tab;
+ if(LIST[tab]){
+  h='<div class="stack"><p class="intro">'+t.intro[tab]+'</p>'+(tab==='len'?legendHTML():'')+LIST[tab].map(cardHTML).join('')+'<p class="src-note">'+t.srcNote+'</p></div>';
+ }else if(tab==='sol')h=solHTML();
+ else if(tab==='ref')h=refHTML();
+ else h='<div class="stack">'+quizHTML()+'</div>';
+ $('#view').innerHTML=h;
+ (LIST[tab]||[]).forEach(drawFig);
+ if(tab==='sol')solAfterRender();
+}
+function renderTabs(){
+ var t=T[state.lang];
+ $('#tabs').innerHTML=TABS.map(function(k){
+  return '<button type="button" class="tab" role="tab" data-act="tab" data-tab="'+k+'" aria-selected="'+(state.tab===k)+'">'+t.tabs[k]+'</button>';
+ }).join('');
+}
+var ICON={
+ sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
+ moon:'<path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/>',
+ pen:'<path d="M4 20l1-4L16.5 4.5a2 2 0 0 1 3 3L8 19l-4 1z"/><path d="M14.5 6.5l3 3"/>',
+ eraser:'<path d="M9 19h11"/><path d="M5.6 15.4l8.8-8.8a2 2 0 0 1 2.8 0l2.2 2.2a2 2 0 0 1 0 2.8L12.5 19H9.4a2 2 0 0 1-1.4-.6l-2.4-2.4a1 1 0 0 1 0-1.4z"/>',
+ line:'<path d="M5 19L19 5"/><circle cx="5" cy="19" r="1.7"/><circle cx="19" cy="5" r="1.7"/>',
+ undo:'<path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/>',
+ trash:'<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>'
+};
+function svgI(n){return '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+ICON[n]+'</svg>';}
+function renderTheme(){
+ var t=T[state.lang],b=$('#themeBtn');
+ document.documentElement.setAttribute('data-theme',state.theme);
+ b.innerHTML=svgI(state.theme==='dark'?'sun':'moon');
+ var lab=state.theme==='dark'?t.toLight:t.toDark;
+ b.setAttribute('aria-label',lab);b.setAttribute('title',lab);
+}
+
+/* ---------- pen / ink layer ---------- */
+var ink=$('#ink'),ctx=ink.getContext('2d'),dpr=1;
+var penStore=LS.get('coord2.ink')||{};
+var pen={tool:'off',color:'p1',size:1,armed:false};
+var SIZES=[2.2,4,7];
+var strokes=[],cur=null,erasing=false,armTimer=null;
+function penKey(){return state.lang+'|'+state.tab;}
+function loadStrokes(){var k=penKey();if(!Array.isArray(penStore[k]))penStore[k]=[];strokes=penStore[k];}
+function saveInk(){LS.set('coord2.ink',penStore);}
+function colorOf(c){return getComputedStyle(document.documentElement).getPropertyValue('--pen-'+c.slice(1)).trim()||'#1b3fd0';}
+function sizeInk(){
+ var v=$('#view'),w=v.clientWidth,h=v.clientHeight;
+ if(!w||!h)return;
+ dpr=Math.min(window.devicePixelRatio||1,1.5);
+ ink.width=Math.round(w*dpr);ink.height=Math.round(h*dpr);
+ ink.style.width=w+'px';ink.style.height=h+'px';
+ drawAll();
+}
+function setLine(s){
+ var col=colorOf(s.c);
+ ctx.strokeStyle=col;ctx.fillStyle=col;ctx.lineWidth=s.w;ctx.lineCap='round';ctx.lineJoin='round';
+}
+function drawStroke(s){
+ var w=ink.clientWidth,p=s.p.map(function(a){return [a[0]*w,a[1]]});
+ setLine(s);
+ if(p.length===1){ctx.beginPath();ctx.arc(p[0][0],p[0][1],s.w/2,0,6.2832);ctx.fill();return;}
+ ctx.beginPath();ctx.moveTo(p[0][0],p[0][1]);
+ for(var i=1;i<p.length-1;i++){ctx.quadraticCurveTo(p[i][0],p[i][1],(p[i][0]+p[i+1][0])/2,(p[i][1]+p[i+1][1])/2);}
+ var l=p[p.length-1];ctx.lineTo(l[0],l[1]);ctx.stroke();
+}
+function drawAll(){
+ ctx.setTransform(dpr,0,0,dpr,0,0);
+ ctx.clearRect(0,0,ink.clientWidth,ink.clientHeight);
+ strokes.forEach(drawStroke);
+}
+function pos(e){var r=ink.getBoundingClientRect();return [(e.clientX-r.left)/r.width,e.clientY-r.top];}
+function strokeHit(s,x,y,R,w){
+ if(s.line){var ax=s.p[0][0]*w,ay=s.p[0][1],bx=s.p[1][0]*w,by=s.p[1][1],vx=bx-ax,vy=by-ay,L2=vx*vx+vy*vy,t=L2?Math.max(0,Math.min(1,((x-ax)*vx+(y-ay)*vy)/L2)):0,px=ax+t*vx-x,py=ay+t*vy-y;return px*px+py*py<R*R;}
+ return s.p.some(function(a){var dx=a[0]*w-x,dy=a[1]-y;return dx*dx+dy*dy<R*R;});
+}
+function eraseAt(e){
+ var r=ink.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top,R=15,n=strokes.length;
+ for(var i=strokes.length-1;i>=0;i--){
+  if(strokeHit(strokes[i],x,y,R,r.width))strokes.splice(i,1);
+ }
+ if(strokes.length!==n)drawAll();
+}
+ink.addEventListener('pointerdown',function(e){
+ if(pen.tool==='off')return;
+ e.preventDefault();
+ try{ink.setPointerCapture(e.pointerId);}catch(x){}
+ if(pen.tool==='line'){cur={c:pen.color,w:SIZES[pen.size],p:[pos(e),pos(e)],line:1};strokes.push(cur);drawAll();return;}
+ if(pen.tool==='pen'){
+  cur={c:pen.color,w:SIZES[pen.size],p:[pos(e)]};strokes.push(cur);
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  var q=cur.p[0];setLine(cur);ctx.beginPath();ctx.arc(q[0]*ink.clientWidth,q[1],cur.w/2,0,6.2832);ctx.fill();
+ }else{erasing=true;eraseAt(e);}
+});
+ink.addEventListener('pointermove',function(e){
+ if(cur&&cur.line){var p0=pos(e),a0=cur.p[0],w0=ink.clientWidth,ddx=(p0[0]-a0[0])*w0,ddy=p0[1]-a0[1],g0=Math.atan2(Math.abs(ddy),Math.abs(ddx))/D;if(g0<3)p0[1]=a0[1];else if(g0>87)p0[0]=a0[0];cur.p[1]=p0;drawAll();return;}
+ if(cur){
+  var p=pos(e),l=cur.p[cur.p.length-1],w=ink.clientWidth,dx=(p[0]-l[0])*w,dy=p[1]-l[1];
+  if(dx*dx+dy*dy<2.25)return;
+  cur.p.push(p);
+  ctx.setTransform(dpr,0,0,dpr,0,0);setLine(cur);
+  ctx.beginPath();ctx.moveTo(l[0]*w,l[1]);ctx.lineTo(p[0]*w,p[1]);ctx.stroke();
+ }else if(erasing){eraseAt(e);}
+});
+function endInk(){
+ if(cur){cur=null;drawAll();saveInk();}
+ if(erasing){erasing=false;saveInk();}
+}
+ink.addEventListener('pointerup',endInk);
+ink.addEventListener('pointercancel',endInk);
+
+function toast(msg){
+ var el=$('#toast');el.textContent=msg;el.hidden=false;
+ clearTimeout(toast.t);toast.t=setTimeout(function(){el.hidden=true;},3200);
+}
+function renderPen(){
+ var t=T[state.lang];
+ var colors=['p1','p2','p3'].map(function(c,i){
+  return '<button type="button" class="tool sw" data-color="'+c+'" aria-pressed="'+(pen.tool==='pen'&&pen.color===c)+'" aria-label="'+t['c'+(i+1)]+'" title="'+t['c'+(i+1)]+'"><i class="dot" style="background:var(--pen-'+(i+1)+')"></i></button>';
+ }).join('');
+ var sz=Math.round(SIZES[pen.size]*1.6+4);
+ $('#penWrap').innerHTML='<div class="pen-bar" role="toolbar" aria-label="'+t.penGroup+'">'+
+  '<button type="button" class="tool" data-tool="pen" aria-pressed="'+(pen.tool==='pen')+'" aria-label="'+t.pen+'" title="'+t.pen+'">'+svgI('pen')+'</button>'+
+  '<button type="button" class="tool" data-tool="eraser" aria-pressed="'+(pen.tool==='eraser')+'" aria-label="'+t.eraser+'" title="'+t.eraser+'">'+svgI('eraser')+'</button>'+
+  '<button type="button" class="tool" data-tool="line" aria-pressed="'+(pen.tool==='line')+'" aria-label="'+t.lineTool+'" title="'+t.lineTool+'">'+svgI('line')+'</button>'+
+  '<span class="sep"></span>'+colors+
+  '<button type="button" class="tool" data-act="size" aria-label="'+t.size+'" title="'+t.size+'"><i class="dot" style="width:'+sz+'px;height:'+sz+'px"></i></button>'+
+  '<span class="sep"></span>'+
+  '<button type="button" class="tool" data-act="undo" aria-label="'+t.undo+'" title="'+t.undo+'">'+svgI('undo')+'</button>'+
+  '<button type="button" class="tool'+(pen.armed?' armed':'')+'" data-act="clear" aria-label="'+(pen.armed?t.clearArmed:t.clear)+'" title="'+(pen.armed?t.clearArmed:t.clear)+'">'+svgI('trash')+'</button>'+
+  '</div>';
+ document.body.setAttribute('data-tool',pen.tool);
+}
+
+/* ---------- events ---------- */
+function setTool(name){
+ var t=T[state.lang];
+ pen.tool=(pen.tool===name)?'off':name;
+ renderPen();
+ if(pen.tool==='pen')toast(t.penOn);else if(pen.tool==='eraser')toast(t.eraserOn);else if(pen.tool==='line')toast(t.lineOn);
+}
+function copySym(s){
+ var t=T[state.lang];
+ function ok(){toast(t.copied+': '+s);}
+ function fail(){toast(t.copyFail);}
+ try{
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(s).then(ok,fail);}else fail();
+ }catch(e){fail();}
+}
+document.addEventListener('click',function(e){
+ var el=e.target.closest('button');if(!el)return;
+ var t=T[state.lang];
+ if(el.dataset.lang){
+  state.lang=el.dataset.lang;savePrefs();fullRender();return;
+ }
+ if(el.dataset.size!==undefined&&el.closest('#sizeSeg')){state.size=+el.dataset.size;savePrefs();applySize();requestAnimationFrame(function(){sizeInk();drawAll();});return;}
+ if(el.dataset.tool){setTool(el.dataset.tool);return;}
+ if(el.dataset.color){pen.color=el.dataset.color;pen.tool='pen';renderPen();return;}
+ var act=el.dataset.act;if(!act)return;
+ if(act==='theme'){state.theme=state.theme==='dark'?'light':'dark';savePrefs();renderTheme();requestAnimationFrame(drawAll);}
+ else if(act==='tab'){state.tab=el.dataset.tab;savePrefs();fullRender();window.scrollTo(0,0);}
+ else if(act==='mode'){
+  var v=view(el.dataset.id),nm=el.dataset.mode;
+  if(nm==='net'){v.yaw=0;v.pitch=Math.PI/2;}
+  else if(v.mode==='net'){v.yaw=-.55;v.pitch=.5;}
+  v.mode=nm;
+  $$('[data-act="mode"][data-id="'+el.dataset.id+'"]').forEach(function(b){b.setAttribute('aria-pressed',String(b===el));});
+  drawFig(el.dataset.id);
+ }
+ else if(act==='reset'){var v2=view(el.dataset.id);var it0=ITEMS[el.dataset.id];v2.yaw=it0.v0?it0.v0.yaw:-.55;v2.pitch=it0.v0?it0.v0.pitch:.5;drawFig(el.dataset.id);}
+ else if(act==='rgroup'){
+  state.ref.g=el.dataset.g;
+  $$('[data-act="rgroup"]').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.g===state.ref.g));});
+  $('#refGrid').innerHTML=refGridHTML();requestAnimationFrame(sizeInk);
+ }
+ else if(act==='copy'){copySym(el.dataset.sym);}
+ else if(act==='qpick'){
+  var q=state.quiz;if(q.sel!==null)return;
+  q.sel=+el.dataset.i;if(q.sel===QUIZ[q.i].a)q.score++;renderView();sizeInk();
+ }
+ else if(act==='qnext'){
+  var qq=state.quiz;
+  if(qq.i===QUIZ.length-1)qq.done=true;else{qq.i++;qq.sel=null;}
+  renderView();sizeInk();
+ }
+ else if(act==='qrestart'){state.quiz={i:0,sel:null,score:0,done:false};renderView();sizeInk();}
+ else if(act==='size'){pen.size=(pen.size+1)%SIZES.length;renderPen();}
+ else if(act==='undo'){strokes.pop();drawAll();saveInk();}
+ else if(act==='clear'){
+  if(pen.armed){strokes.length=0;drawAll();saveInk();pen.armed=false;clearTimeout(armTimer);renderPen();toast(t.cleared);}
+  else{pen.armed=true;renderPen();toast(t.clearArmed);clearTimeout(armTimer);armTimer=setTimeout(function(){pen.armed=false;renderPen();},3000);}
+ }
+});
+document.addEventListener('input',function(e){
+ var el=e.target;
+ if(el.id==='refq'){state.ref.q=el.value;$('#refGrid').innerHTML=refGridHTML();requestAnimationFrame(sizeInk);}
+ else if(el.type==='range'&&el.dataset.id){
+  var v=view(el.dataset.id);v.n=+el.value;
+  var nv=$('#nv-'+el.dataset.id);if(nv){var sl=ITEMS[el.dataset.id].slider;nv.textContent=sl&&sl.fmt?sl.fmt(v.n):v.n;}
+  drawFig(el.dataset.id);
+ }
+});
+
+/* drag to rotate figures */
+var drag=null;
+document.addEventListener('pointerdown',function(e){
+ var s=e.target.closest&&e.target.closest('svg[data-fig]');if(!s)return;
+ drag={id:s.dataset.fig,x:e.clientX,y:e.clientY,pid:e.pointerId,svg:s};
+ try{s.setPointerCapture(e.pointerId);}catch(x){}
+ s.classList.add('grab');
+});
+document.addEventListener('pointermove',function(e){
+ if(!drag||e.pointerId!==drag.pid)return;
+ var v=view(drag.id),dx=e.clientX-drag.x,dy=e.clientY-drag.y;
+ drag.x=e.clientX;drag.y=e.clientY;
+ v.yaw+=dx*.011;
+ if(e.pointerType==='mouse')v.pitch=Math.max(-.25,Math.min(Math.PI/2,v.pitch+dy*.01));
+ drawFig(drag.id);
+});
+function endDrag(e){if(drag&&e.pointerId===drag.pid){drag.svg.classList.remove('grab');drag=null;}}
+document.addEventListener('pointerup',endDrag);
+document.addEventListener('pointercancel',endDrag);
+document.addEventListener('keydown',function(e){
+ var s=e.target.closest&&e.target.closest('svg[data-fig]');if(!s)return;
+ var v=view(s.dataset.fig),k=e.key,h=true;
+ if(k==='ArrowLeft')v.yaw-=.12;else if(k==='ArrowRight')v.yaw+=.12;
+ else if(k==='ArrowUp')v.pitch=Math.min(Math.PI/2,v.pitch+.08);else if(k==='ArrowDown')v.pitch=Math.max(-.25,v.pitch-.08);
+ else h=false;
+ if(h){e.preventDefault();drawFig(s.dataset.fig);}
+});
+
+/* ================= solver UI ================= */
+var SOLT={
+ ru:{showSol:'Показать решение',hideSol:'Скрыть решение',task0:'Условие',mSolve:'Решатель',mMatch:'Задания на соответствие',mSets:'Наборы заданий',mLeft:'Левый столбец',mRight:'Правый столбец',mHelp:'Нажмите на карточку слева, затем на подходящую карточку справа. Нажмите на уже соединённую карточку, чтобы разъединить пару.',mCheck:'Проверить',mReset:'Начать заново',mAll:'Все пары верны.',mFix:'Исправьте пары с ✗ и проверьте ещё раз.',kind:'Что найти',vals:'Данные',ex:'Примеры из учебника',ans:'Ответ',sol:'Решение',cap:'Искомые точки и векторы выделены цветом и толстой линией.',bad:'Проверьте данные',dims:'Размеры параллелепипеда',v1:'Первая вершина',v2:'Вторая вершина',DC:'DC',DA:'DA',DD:'DD₁',dimh:'DC лежит на Ox, DA — на Oy, DD₁ — на Oz'},
+ kk:{showSol:'Шешуін көрсету',hideSol:'Шешуін жасыру',task0:'Шарты',mSolve:'Шешуші',mMatch:'Сәйкестендіру тапсырмалары',mSets:'Тапсырмалар жиынтығы',mLeft:'Сол жақ баған',mRight:'Оң жақ баған',mHelp:'Солдағы карточканы, сонан соң оңдағы сәйкес карточканы басыңыз. Жұпты ажырату үшін қосылған карточканы қайта басыңыз.',mCheck:'Тексеру',mReset:'Қайта бастау',mAll:'Барлық жұп дұрыс.',mFix:'✗ белгілі жұптарды түзетіп, қайта тексеріңіз.',kind:'Нені табу керек',vals:'Берілгендер',ex:'Оқулықтағы мысалдар',ans:'Жауабы',sol:'Шешуі',cap:'Ізделінді нүктелер мен векторлар түспен және қалың сызықпен көрсетілген.',bad:'Деректерді тексеріңіз',dims:'Параллелепипедтің өлшемдері',v1:'Бірінші төбе',v2:'Екінші төбе',DC:'DC',DA:'DA',DD:'DD₁',dimh:'DC — Ox осінде, DA — Oy осінде, DD₁ — Oz осінде жатыр'}
+};
+state.sol=null;
+ITEMS.sol={v0:{yaw:-.35,pitch:.35},def:'x',modes:[]};
+function solInit(){
+ if(state.sol)return;
+ var e=SOLEX[0];
+ state.sol={kind:e.kind,vals:JSON.parse(JSON.stringify(e.vals)),ex:e.id};
+}
+function solKindSet(k){var s=state.sol;s.kind=k;s.vals=JSON.parse(JSON.stringify(CDEF[k]));s.ex=null;}
+function numInput(key,idx,label,val,min){
+ return '<label class="sol-n"><span>'+label+' =</span><input type="number" inputmode="decimal" step="any"'+(min?' min="0.01"':'')+' class="sol-in" data-key="'+key+'" data-i="'+idx+'" value="'+val+'" aria-label="'+esc(label)+'"></label>';
+}
+function solControls(){
+ var s=state.sol,L=state.lang,t=SOLT[L],h='',i;
+ h+='<div class="sol-f"><label for="sol-kind">'+t.kind+'</label><select id="sol-kind">'+CKINDS.map(function(q){return '<option value="'+q.id+'"'+(q.id===s.kind?' selected':'')+'>'+q[L]+'</option>';}).join('')+'</select></div>';
+ if(s.kind==='box'){
+  var v=s.vals;
+  h+='<div class="sol-f"><label>'+t.dims+'</label><div class="sol-par">'+numInput('p',0,t.DC,v.p,1)+numInput('q',0,t.DA,v.q,1)+numInput('r',0,t.DD,v.r,1)+'</div><small class="sol-hint">'+t.dimh+'</small></div>';
+  var opts=function(cur){return CVK.map(function(k){return '<option value="'+k+'"'+(k===cur?' selected':'')+'>'+vname(k)+'</option>';}).join('');};
+  h+='<div class="sol-objs"><fieldset class="sol-o"><legend>'+t.vals+'</legend><label class="sol-v"><span>'+t.v1+'</span><select class="sol-sel" data-key="P">'+opts(v.P)+'</select></label><label class="sol-v"><span>'+t.v2+'</span><select class="sol-sel" data-key="Q">'+opts(v.Q)+'</select></label></fieldset></div>';
+ }else{
+  h+='<div class="sol-objs">'+CFLD[s.kind].map(function(f){
+   var key=f[0],nm=f[1];
+   if(f[2]==='n')return '<fieldset class="sol-o"><legend>'+nm+'</legend>'+numInput(key,0,nm,s.vals[key])+'</fieldset>';
+   return '<fieldset class="sol-o"><legend>'+nm+'</legend>'+['x','y','z'].map(function(ax,i2){return numInput(key,i2,ax,s.vals[key][i2]);}).join('')+'</fieldset>';
+  }).join('')+'</div>';
+ }
+ h+='<div class="sol-f"><label>'+t.ex+'</label><div class="modes" role="group">'+SOLEX.map(function(e){
+  return '<button type="button" class="mode" data-act="solex" data-id="'+e.id+'" aria-pressed="'+(s.ex===e.id)+'">'+(typeof e.tag==='object'?e.tag[L]:e.tag)+' · '+e[L]+'</button>';
+ }).join('')+'</div></div>';
+ return h;
+}
+function cTask(kind,V){
+ var L=state.lang,a=V.k1,b=V.k2,c3=V.k3,c=function(x){return cs(x);};
+ var A=a?c(a):'',B=b?c(b):'',C3=c3?c(c3):'';
+ var q={
+  len:T2('Найдите длину вектора a'+A+'.','a'+A+' векторының ұзындығын табыңдар.'),
+  dist:T2('Найдите расстояние между точками A₁'+A+' и A₂'+B+'.','A₁'+A+' және A₂'+B+' нүктелерінің арақашықтығын табыңдар.'),
+  mid:T2('Найдите координаты середины отрезка A₁A₂, если A₁'+A+', A₂'+B+'.','A₁'+A+', A₂'+B+' болса, A₁A₂ кесіндісінің ортасының координаталарын табыңдар.'),
+  end:T2('Точка C'+B+' — середина отрезка AB, A'+A+'. Найдите координаты точки B.','C'+B+' нүктесі AB кесіндісінің ортасы, A'+A+'. B нүктесінің координаталарын табыңдар.'),
+  org:T2('Найдите расстояния от точки A'+A+' до начала координат, до координатных осей и до координатных плоскостей.','A'+A+' нүктесінен координаталар басына, координаталық остерге және координаталық жазықтықтарға дейінгі қашықтықты табыңдар.'),
+  cmp:T2('Какая из точек A'+A+' или B'+B+' расположена ближе к началу координат?','A'+A+' немесе B'+B+' нүктелерінің қайсысы координаталар басына жақын орналасқан?'),
+  tri:T2('Определите вид треугольника, если его вершины имеют координаты: A'+A+', B'+B+', C'+C3+'.','Төбелерінің координаталары A'+A+', B'+B+', C'+C3+' болатын үшбұрыштың түрін анықтаңдар.'),
+  box:T2('В прямоугольном параллелепипеде ABCDA₁B₁C₁D₁ DC = '+fmtN(V.p||0,3)+', DA = '+fmtN(V.q||0,3)+', DD₁ = '+fmtN(V.r||0,3)+'; D — начало координат, DC, DA, DD₁ лежат на осях Ox, Oy, Oz. Найдите координаты вектора '+(vname(V.P)||'')+(vname(V.Q)||'')+', его длину и середину отрезка '+(vname(V.P)||'')+(vname(V.Q)||'')+'.','ABCDA₁B₁C₁D₁ тікбұрышты параллелепипедінде DC = '+fmtN(V.p||0,3)+', DA = '+fmtN(V.q||0,3)+', DD₁ = '+fmtN(V.r||0,3)+'; D — координаталар басы, DC, DA, DD₁ қырлары Ox, Oy, Oz осьтерінде жатыр. '+(vname(V.P)||'')+(vname(V.Q)||'')+' векторының координаталарын, ұзындығын және '+(vname(V.P)||'')+(vname(V.Q)||'')+' кесіндісінің ортасын табыңдар.')
+ }[kind];
+ return q[L];
+}
+function solTaskHTML(){
+ var s=state.sol,L=state.lang,t=SOLT[L],ex=SOLEX.filter(function(e){return e.id===s.ex;})[0];
+ var tag=ex?'<span class="tag">'+esc(typeof ex.tag==='object'?ex.tag[L]:ex.tag)+'</span> ':'';
+ return '<div class="m-task"><small>'+tag+t.task0+'</small><p>'+esc(String(cTask(s.kind,s.vals)).replace(/(^|[\s(;])-(?=\d)/g,'$1−'))+'</p></div>';
+}
+function solOutHTML(out){
+ var L=state.lang,t=SOLT[L];
+ if(!out.ok)return '<p class="fb" role="status"><b class="bad">'+t.bad+'.</b> '+esc(out.err[L])+'</p>';
+ if(!state.solShow)return '<button type="button" class="btn" data-act="solshow" aria-expanded="false">'+t.showSol+'</button>';
+ var main=out.res.filter(function(r){return r.main;})[0]||out.res[0];
+ var mm=function(z){return String(z).replace(/(^|[\s(;])-(?=\d)/g,'$1\u2212');};
+ var txt=function(x){return esc(mm(typeof x==='object'?x[L]:x));};
+ return '<div class="sol-ans" role="status"><small>'+t.ans+'</small>'+out.res.map(function(r){return '<div class="sol-res'+(r===main?' main':'')+'"><span class="k">'+txt(r.k)+'</span><b>'+txt(r.v)+'</b></div>';}).join('')+'</div>'+
+  '<details class="proof" open><summary>'+t.sol+'</summary><ol>'+out.steps.map(function(x){return '<li>'+esc(mm(x[L]))+'</li>';}).join('')+'</ol></details><button type="button" class="btn ghost" data-act="solshow" aria-expanded="true">'+t.hideSol+'</button>';
+}
+function solCompute(){
+ var s=state.sol,out=cSolve(s.kind,s.vals);
+ state.solCache={out:out};
+ return state.solCache;
+}
+function drawSol(){
+ var svg=$('svg[data-fig="sol"]');if(!svg||!state.sol)return;
+ var c=state.solCache||solCompute();
+ svg.innerHTML=c.out.ok?renderScene(cScene(c.out),view('sol')):'';
+}
+function solRefresh(){
+ var c=solCompute(),o=$('#solOut');
+ if(o)o.innerHTML=solOutHTML(c.out);
+ var tk=$('#solTask');if(tk)tk.innerHTML=solTaskHTML();
+ drawSol();
+ requestAnimationFrame(sizeInk);
+}
+function solHTML(){
+ solInit();
+ var L=state.lang,t=SOLT[L],tt=T[L],md=state.solMode;
+ var sw='<div class="modes" role="group" aria-label="'+esc(tt.tabs.sol)+'">'+
+  '<button type="button" class="mode" data-act="solmode" data-v="solve" aria-pressed="'+(md==='solve')+'">'+t.mSolve+'</button>'+
+  '<button type="button" class="mode" data-act="solmode" data-v="match" aria-pressed="'+(md==='match')+'">'+t.mMatch+'</button></div>';
+ if(md==='match')return '<div class="stack"><p class="intro">'+tt.intro.sol+'</p>'+sw+matchHTML()+'<p class="src-note">'+tt.srcNote+'</p></div>';
+ return '<div class="stack"><p class="intro">'+tt.intro.sol+'</p>'+sw+
+  '<article class="card sol" id="card-sol"><div class="c-text"><div id="solCtl">'+solControls()+'</div></div>'+
+  '<div class="c-fig"><figure class="fig"><svg data-fig="sol" viewBox="0 0 420 300" role="img" tabindex="0" aria-label="'+esc(tt.tabs.sol)+'"></svg><figcaption>'+t.cap+'</figcaption></figure>'+
+  '<div id="solTask">'+solTaskHTML()+'</div><div class="fig-foot"><span>'+tt.hint+'</span><button type="button" class="link-btn" data-act="reset" data-id="sol">'+tt.reset+'</button></div></div><div class="sol-zone"><div id="solOut"></div><div class="work" aria-hidden="true"><small>'+(L==='ru'?'Место для решения':'Шешуге арналған орын')+'</small></div></div></article>'+
+  '<p class="src-note">'+tt.srcNote+'</p></div>';
+}
+/* ---- matching cards ---- */
+var MATCH=[
+ {t:{ru:'Длина вектора',kk:'Вектордың ұзындығы'},p:[
+  ['a(2; 3; 6)','7'],['a(1; 2; 2)','3'],['a(0; 3; 4)','5'],['a(1; 4; 8)','9'],['a(−2; −6; −9)','11']]},
+ {t:{ru:'Расстояние между точками A и B',kk:'A және B нүктелерінің арақашықтығы'},p:[
+  ['A(1; 1; 1), B(3; 4; 7)','7'],['A(0; 2; −1), B(1; 4; 1)','3'],['A(−1; 0; 2), B(3; 4; 9)','9'],['A(2; −3; 0), B(8; 3; 7)','11'],['A(1; 0; 0), B(4; 4; 12)','13']]},
+ {t:{ru:'Середина отрезка AB',kk:'AB кесіндісінің ортасы'},p:[
+  ['A(1; 2; 3), B(−1; 0; 1)','(0; 1; 2)'],['A(2; 0; 4), B(4; 6; 0)','(3; 3; 2)'],['A(−3; 1; 5), B(1; −1; −1)','(−1; 0; 2)'],['A(0; 0; 0), B(6; −2; 8)','(3; −1; 4)']]},
+ {t:{ru:'Второй конец отрезка по середине',kk:'Кесіндінің екінші ұшы ортасы бойынша'},p:[
+  [{ru:'A(1; 2; 3), середина C(2; 3; 4)',kk:'A(1; 2; 3), ортасы C(2; 3; 4)'},'B(3; 4; 5)'],
+  [{ru:'A(0; 0; 0), середина C(1; −2; 3)',kk:'A(0; 0; 0), ортасы C(1; −2; 3)'},'B(2; −4; 6)'],
+  [{ru:'A(−1; 2; 0), середина C(0; 1; 2)',kk:'A(−1; 2; 0), ортасы C(0; 1; 2)'},'B(1; 0; 4)'],
+  [{ru:'A(3; 3; 3), середина C(1; 1; 1)',kk:'A(3; 3; 3), ортасы C(1; 1; 1)'},'B(−1; −1; −1)'],
+  [{ru:'A(2; 0; −2), середина C(2; 5; 1)',kk:'A(2; 0; −2), ортасы C(2; 5; 1)'},'B(2; 10; 4)']]},
+ {t:{ru:'Расстояние от точки до начала координат',kk:'Нүктеден координаталар басына дейінгі қашықтық'},p:[
+  ['A(3; 4; 0)','5'],['B(1; −2; 2)','3'],['C(2; 3; 6)','7'],['D(0; 6; 8)','10'],['E(2; −6; 9)','11']]},
+ {t:{ru:'Расстояния от точки A(1; −2; 3)',kk:'A(1; −2; 3) нүктесінен қашықтық'},p:[
+  [{ru:'до оси Ox',kk:'Ox осіне дейін'},'√13'],[{ru:'до оси Oy',kk:'Oy осіне дейін'},'√10'],[{ru:'до оси Oz',kk:'Oz осіне дейін'},'√5'],
+  [{ru:'до плоскости Oxy',kk:'Oxy жазықтығына дейін'},'3'],[{ru:'до начала координат',kk:'координаталар басына дейін'},'√14']]},
+ {t:{ru:'Вид треугольника ABC',kk:'ABC үшбұрышының түрі'},p:[
+  ['A(0; 0; 2), B(0; 2; 0), C(2; 0; 0)',{ru:'равносторонний',kk:'тең қабырғалы'}],
+  ['A(0; 0; 0), B(3; 0; 0), C(0; 4; 0)',{ru:'прямоугольный разносторонний',kk:'тікбұрышты әртүрлі қабырғалы'}],
+  ['A(0; 0; 0), B(2; 0; 0), C(1; 3; 0)',{ru:'равнобедренный, не прямоугольный',kk:'тең бүйірлі, тікбұрышты емес'}],
+  ['A(0; 0; 0), B(3; 0; 0), C(1; 2; 0)',{ru:'разносторонний, не прямоугольный',kk:'әртүрлі қабырғалы, тікбұрышты емес'}],
+  ['A(0; 0; 0), B(2; 0; 0), C(0; 2; 0)',{ru:'прямоугольный равнобедренный',kk:'тікбұрышты тең бүйірлі'}]]},
+ {t:{ru:'Термины и их смысл',kk:'Терминдер және олардың мәні'},p:[
+  [{ru:'расстояние между точками',kk:'нүктелердің арақашықтығы'},{ru:'длина отрезка, соединяющего эти точки',kk:'сол нүктелерді қосатын кесіндінің ұзындығы'}],
+  [{ru:'середина отрезка',kk:'кесіндінің ортасы'},{ru:'точка, делящая отрезок пополам',kk:'кесіндіні тең екіге бөлетін нүкте'}],
+  [{ru:'единичный вектор',kk:'бірлік вектор'},{ru:'вектор длины 1',kk:'ұзындығы 1-ге тең вектор'}],
+  [{ru:'нулевой вектор',kk:'нөлдік вектор'},{ru:'вектор длины 0',kk:'ұзындығы 0-ге тең вектор'}],
+  [{ru:'диагональ параллелепипеда',kk:'параллелепипедтің диагоналі'},{ru:'отрезок между противоположными вершинами',kk:'қарама-қарсы төбелерін қосатын кесінді'}]]},
+ {t:{ru:'Формулы и их названия',kk:'Формулалар және олардың атаулары'},p:[
+  ['|a| = √(x² + y² + z²)',{ru:'длина вектора',kk:'вектордың ұзындығы'}],
+  ['√((x₂−x₁)² + (y₂−y₁)² + (z₂−z₁)²)',{ru:'расстояние между точками',kk:'нүктелердің арақашықтығы'}],
+  ['((x₁+x₂)/2; (y₁+y₂)/2; (z₁+z₂)/2)',{ru:'середина отрезка',kk:'кесіндінің ортасы'}],
+  ['(2x₀−x₁; 2y₀−y₁; 2z₀−z₁)',{ru:'второй конец по середине',kk:'ортасы бойынша екінші ұшы'}],
+  ['√(a² + b² + c²)',{ru:'диагональ параллелепипеда',kk:'параллелепипедтің диагоналі'}]]},
+ {t:{ru:'Рисунок → формула',kk:'Сурет → формула'},p:[
+  [{img:'fO'},'OA = √(x² + y² + z²)'],[{img:'fD'},'A₁A₂ = √((x₂−x₁)² + (y₂−y₁)² + (z₂−z₁)²)'],
+  [{img:'fM'},'C((x₁+x₂)/2; (y₁+y₂)/2; (z₁+z₂)/2)'],[{img:'fV'},'A₁A₂ = (x₂−x₁; y₂−y₁; z₂−z₁)'],[{img:'fX'},'A₁A₂ = |x₂ − x₁|']]},
+ {t:{ru:'Рисунок → диагональ параллелепипеда',kk:'Сурет → параллелепипедтің диагоналі'},
+  n:{ru:'На рисунках подписаны рёбра DC, DA, DD₁; найдите длину диагонали DB₁.',kk:'Суреттерде DC, DA, DD₁ қырлары жазылған; DB₁ диагоналінің ұзындығын табыңдар.'},p:[
+  [{img:'b1'},'3'],[{img:'b2'},'7'],[{img:'b3'},'9'],[{img:'b4'},'11'],[{img:'b5'},'13']]},
+ {t:{ru:'Рисунок → центр параллелепипеда',kk:'Сурет → параллелепипедтің центрі'},
+  n:{ru:'D — начало координат, M — середина диагонали DB₁; рёбра подписаны.',kk:'D — координаталар басы, M — DB₁ диагоналінің ортасы; қырлары жазылған.'},p:[
+  [{img:'m1'},'M(1; 2; 3)'],[{img:'m2'},'M(2; 1; 1)'],[{img:'m3'},'M(3; 1; 2)'],[{img:'m4'},'M(1; 1; 1)'],[{img:'m5'},'M(2; 3; 1)']]},
+ {t:{ru:'Рисунок → расстояние от точки A(2; 3; 4)',kk:'Сурет → A(2; 3; 4) нүктесінен қашықтық'},
+  n:{ru:'Выделенный отрезок показывает, до чего считается расстояние: начало координат, ось или плоскость.',kk:'Бөлектелген кесінді қашықтық неге дейін есептелетінін көрсетеді: координаталар басы, ось немесе жазықтық.'},p:[
+  [{img:'dO'},'√29'],[{img:'dX'},'5'],[{img:'dY'},'2√5'],[{img:'dZ'},'√13'],[{img:'dP'},'4']]},
+ {t:{ru:'Рисунок → вид треугольника',kk:'Сурет → үшбұрыштың түрі'},
+  n:{ru:'Длины сторон подписаны на рисунках.',kk:'Қабырғаларының ұзындықтары суреттерде жазылған.'},p:[
+  [{img:'tA'},{ru:'равносторонний',kk:'тең қабырғалы'}],[{img:'tB'},{ru:'прямоугольный равнобедренный',kk:'тікбұрышты тең бүйірлі'}],
+  [{img:'tC'},{ru:'прямоугольный разносторонний',kk:'тікбұрышты әртүрлі қабырғалы'}],[{img:'tD'},{ru:'равнобедренный, не прямоугольный',kk:'тең бүйірлі, тікбұрышты емес'}],
+  [{img:'tE'},{ru:'разносторонний, не прямоугольный',kk:'әртүрлі қабырғалы, тікбұрышты емес'}]]}
+];
+
+/* ---- pictures for matching cards ---- */
+var ARW=1;
+function mAx(){return axes3(1.6,.6);}
+function mBox(p,q,r,diag,mid){
+ var s=.95/Math.max(p,q,r),P=boxPolyD(p,q,r,s),O=[0,0,0];
+ P.names=['','','','D','',diag?'B₁':'','',''];
+ var ov=axes3(1.3,.5,{noO:1}).concat([
+  ln(A3(O,s),A3([p,0,0],s),{c:'a',w:3,lab:String(p),le:'m',lt:.55,lo:[6,30]}),
+  ln(A3(O,s),A3([0,q,0],s),{c:'b',w:3,lab:String(q),le:'m',lt:.55,lo:[-30,14]}),
+  ln(A3(O,s),A3([0,0,r],s),{c:'c',w:3,lab:String(r),le:'m',lt:.5,lo:[-26,0]}),
+  ln(A3(O,s),A3([p,q,r],s),{c:'accent',w:3.4})]);
+ if(mid)ov.push(pt(A3([p/2,q/2,r/2],s),'M',{o:[14,-8]}));
+ P.ov=ov;
+ return {poly:P};
+}
+function mTri(P,lb,s){
+ var cx=(P[0][0]+P[1][0]+P[2][0])/3,cy=(P[0][1]+P[1][1]+P[2][1])/3,C=['a','b','c'],o=[],k,a,b,mx,my,d,N=['A','B','C'];
+ for(k=0;k<3;k++){
+  a=P[k];b=P[(k+1)%3];mx=(a[0]+b[0])/2-cx;my=(a[1]+b[1])/2-cy;d=Math.sqrt(mx*mx+my*my)||1;
+  o.push(Sl([a[0]-cx,0,a[1]-cy],[b[0]-cx,0,b[1]-cy],s,C[k],lb[k],[mx/d*26,-my/d*26],3));
+ }
+ for(k=0;k<3;k++){a=P[k];mx=a[0]-cx;my=a[1]-cy;d=Math.sqrt(mx*mx+my*my)||1;o.push(Pn([a[0]-cx,0,a[1]-cy],s,N[k],[mx/d*14,-my/d*14]));}
+ return o;
+}
+var MIMG={
+ dO:function(){var s=.25,A=[2,3,4];return mAx().concat(dropBox(A,s),[Sg([0,0,0],A,s,'accent',4),Pn(A,s,'A',[12,-10])]);},
+ dX:function(){var s=.25,A=[2,3,4];return mAx().concat(dropBox(A,s),[Sg(A,[2,0,0],s,'accent',4),Pn(A,s,'A',[12,-10])]);},
+ dY:function(){var s=.25,A=[2,3,4];return mAx().concat(dropBox(A,s),[Sg(A,[0,3,0],s,'accent',4),Pn(A,s,'A',[12,-10])]);},
+ dZ:function(){var s=.25,A=[2,3,4];return mAx().concat(dropBox(A,s),[Sg(A,[0,0,4],s,'accent',4),Pn(A,s,'A',[12,-10])]);},
+ dP:function(){var s=.25,A=[2,3,4];return mAx().concat(dropBox(A,s),[Sg(A,[2,3,0],s,'accent',4),Pn(A,s,'A',[12,-10])]);},
+ tA:function(){return mTri([[0,0],[2,0],[1,1.732]],['√2','√2','√2'],.45);},
+ tB:function(){return mTri([[0,0],[2,0],[0,2]],['2','2√2','2'],.4);},
+ tC:function(){return mTri([[0,0],[3,0],[0,4]],['3','5','4'],.3);},
+ tD:function(){return mTri([[0,0],[2,0],[1,3]],['2','√10','√10'],.3);},
+ tE:function(){return mTri([[0,0],[3,0],[1,2]],['3','√8','√5'],.33);},
+ fO:function(){var s=.22,A=[2,3,4];return mAx().concat(dropBox(A,s),[ln([0,0,0],A3(A,s),{c:'accent',w:3.4}),Pn(A,s,'A',[12,-10])]);},
+ fD:function(){var s=.22,A=[1,1,1],B=[3,4,5];return mAx().concat(spanBox(A,B,s),[Sg(A,B,s,'accent',3.4),Pn(A,s,'A₁',[-14,-8]),Pn(B,s,'A₂',[12,-10])]);},
+ fM:function(){var s=.22,A=[1,1,1],B=[3,4,5],C=[2,2.5,3];return mAx().concat([Sg(A,B,s,'accent',3.4),Pn(A,s,'A₁',[-14,-8]),Pn(B,s,'A₂',[12,-10]),Pn(C,s,'C',[14,-6])]);},
+ fV:function(){var s=.22,A=[1,1,1],B=[3,4,5];return mAx().concat([Ar([0,0,0],A,s,'a','',null,2.2),Ar([0,0,0],B,s,'b','',null,2.2),Ar(A,B,s,'accent','',null,3.4),Pn(A,s,'A₁',[-14,-8]),Pn(B,s,'A₂',[12,-10])]);},
+ fX:function(){var s=.3,A=[1,0,0],B=[5,0,0];return mAx().concat([Sg(A,B,s,'accent',4),Pn(A,s,'A₁',[0,18]),Pn(B,s,'A₂',[0,18])]);},
+ b1:function(){return mBox(1,2,2,1,0);},b2:function(){return mBox(2,3,6,1,0);},b3:function(){return mBox(4,4,7,1,0);},b4:function(){return mBox(6,6,7,1,0);},b5:function(){return mBox(3,4,12,1,0);},
+ m1:function(){return mBox(2,4,6,0,1);},m2:function(){return mBox(4,2,2,0,1);},m3:function(){return mBox(6,2,4,0,1);},m4:function(){return mBox(2,2,2,0,1);},m5:function(){return mBox(4,6,2,0,1);}
+};
+function mImg(key,n){
+ var f=MIMG[key](),vw={yaw:-.35,pitch:.35},inner;
+ ARW=1.5;
+ try{inner=f.poly?polySVG(f.poly,vw):renderPrims(f,vw);}finally{ARW=1;}
+ return '<span class="mt-img"><svg viewBox="'+(/^t/.test(key)?'115 10 280 270':'115 10 280 240')+'" role="img" aria-label="'+(state.lang==='ru'?'Рисунок ':'Сурет ')+n+'">'+inner+'</svg></span>';
+}
+function mcell(x,n){return (x&&typeof x==='object'&&x.img)?mImg(x.img,n):esc(mtx(x));}
+var MLET=['А','Б','В','Г','Д'];
+state.solMode='solve';state.solShow=false;
+state.match={set:0,sel:null,map:{},checked:false};
+function mtx(x){return typeof x==='object'?x[state.lang]:x;}
+function mOrder(n,seed){
+ var a=[],i,x=seed*7919+13,j,t;
+ for(i=0;i<n;i++)a.push(i);
+ for(i=n-1;i>0;i--){x=(x*1103515245+12345)%2147483648;j=x%(i+1);t=a[i];a[i]=a[j];a[j]=t;}
+ if(a.every(function(v,k){return v===k;}))a.push(a.shift());
+ return a;
+}
+function matchHTML(){
+ var L=state.lang,t=SOLT[L],m=state.match,S=MATCH[m.set],n=S.p.length,ord=mOrder(n,m.set+1),i,k,h='';
+ var inv={};Object.keys(m.map).forEach(function(l){inv[m.map[l]]=+l;});
+ h+='<div class="modes" role="group" aria-label="'+esc(t.mSets)+'">'+MATCH.map(function(s,si){return '<button type="button" class="mode" data-act="mset" data-i="'+si+'" aria-pressed="'+(si===m.set)+'">'+(si+1)+'. '+esc(s.t[L])+'</button>';}).join('')+'</div>';
+ var cnt=Object.keys(m.map).length;
+ h+='<article class="card match"><div class="m-head"><h2>'+esc(S.t[L])+'</h2><span class="m-cnt">'+cnt+' / '+n+'</span></div><p class="m-help">'+t.mHelp+(S.n?' '+esc(S.n[L]):'')+'</p>';
+ h+='<div class="mt'+(S.p[0][0].img?' has-img':'')+'"><div class="mt-col" role="group" aria-label="'+esc(t.mLeft)+'">';
+ for(i=0;i<n;i++){
+  var got=m.map[i],cls='mt-c'+(S.p[i][0].img?' img':'')+(m.sel===i?' sel':'')+(got!==undefined?' got':''),mark='';
+  if(m.checked){var ok=got===i;cls+=ok?' ok':' bad';mark='<i class="mt-m" aria-hidden="true">'+(ok?'✓':'✗')+'</i>';}
+  h+='<button type="button" class="'+cls+'" data-act="mleft" data-i="'+i+'" aria-pressed="'+(m.sel===i)+'"><span class="mt-n">'+(i+1)+'</span><span class="mt-t">'+mcell(S.p[i][0],i+1)+'</span><span class="mt-b">'+(got!==undefined?MLET[ord.indexOf(got)]:'')+'</span>'+mark+'</button>';
+ }
+ h+='</div><div class="mt-col" role="group" aria-label="'+esc(t.mRight)+'">';
+ for(k=0;k<n;k++){
+  var oi=ord[k],lf=inv[oi];
+  h+='<button type="button" class="mt-c'+(S.p[oi][1].img?' img':'')+(lf!==undefined?' got':'')+'" data-act="mright" data-i="'+oi+'"><span class="mt-n">'+MLET[k]+'</span><span class="mt-t">'+mcell(S.p[oi][1],k+1)+'</span><span class="mt-b">'+(lf!==undefined?(lf+1):'')+'</span></button>';
+ }
+ h+='</div></div>';
+ var fb='';
+ if(m.checked){
+  var sc=0;for(i=0;i<n;i++)if(m.map[i]===i)sc++;
+  fb='<p class="fb" role="status"><b class="'+(sc===n?'ok':'bad')+'">'+sc+' '+T[L].of+' '+n+'.</b> '+(sc===n?t.mAll:t.mFix)+'</p>';
+ }
+ h+=fb+'<div class="m-act"><button type="button" class="btn" data-act="mcheck">'+t.mCheck+'</button><button type="button" class="btn ghost" data-act="mreset">'+t.mReset+'</button></div></article>';
+ return h;
+}
+function matchRender(){var el=$('#view');if(!el)return;var y=window.scrollY;el.innerHTML=solHTML();window.scrollTo(0,y);requestAnimationFrame(sizeInk);}
+document.addEventListener('click',function(e){
+ var el=e.target.closest&&e.target.closest('[data-act^="m"],[data-act="solmode"]');if(!el||state.tab!=='sol')return;
+ var act=el.dataset.act,m=state.match,i=+el.dataset.i,l;
+ if(act==='solmode'){state.solShow=false;state.solMode=el.dataset.v;matchRender();if(state.solMode==='solve')solRefresh();return;}
+ if(act==='mset'){m.set=i;m.sel=null;m.map={};m.checked=false;matchRender();return;}
+ if(act==='mreset'){m.sel=null;m.map={};m.checked=false;matchRender();return;}
+ if(act==='mcheck'){m.checked=true;matchRender();return;}
+ if(act==='mleft'){m.checked=false;if(m.map[i]!==undefined&&m.sel!==i){delete m.map[i];m.sel=null;}else m.sel=(m.sel===i?null:i);matchRender();return;}
+ if(act==='mright'){
+  m.checked=false;
+  for(l in m.map)if(m.map[l]===i){delete m.map[l];m.sel=null;matchRender();return;}
+  if(m.sel!==null){m.map[m.sel]=i;m.sel=null;}
+  matchRender();return;
+ }
+});
+function solAfterRender(){if(state.solMode==='match')return;solRefresh();}
+function solClearEx(){var s=state.sol;s.ex=null;$$('[data-act="solex"]').forEach(function(b){b.setAttribute('aria-pressed','false');});}
+document.addEventListener('change',function(e){
+ var el=e.target,s=state.sol;if(!s||state.tab!=='sol')return;
+ if(el.id==='sol-kind'){state.solShow=false;solKindSet(el.value);$('#solCtl').innerHTML=solControls();solRefresh();}
+ else if(el.classList.contains('sol-sel')){s.vals[el.dataset.key]=el.value;solClearEx();solRefresh();}
+});
+document.addEventListener('input',function(e){
+ var el=e.target,s=state.sol;if(!s||state.tab!=='sol'||!el.classList.contains('sol-in'))return;
+ var v=parseFloat(String(el.value).replace(',','.')),key=el.dataset.key,i=+el.dataset.i;
+ if(!isFinite(v)||((key==='p'||key==='q'||key==='r')&&!(v>0))){el.setAttribute('aria-invalid','true');return;}
+ el.removeAttribute('aria-invalid');
+ if(Array.isArray(s.vals[key]))s.vals[key][i]=v;else s.vals[key]=v;
+ solClearEx();solRefresh();
+});
+document.addEventListener('click',function(e){
+ var el=e.target.closest&&e.target.closest('[data-act="solex"]');if(!el)return;
+ var ex=SOLEX.filter(function(x){return x.id===el.dataset.id;})[0],s=state.sol;
+ state.solShow=false;s.kind=ex.kind;s.vals=JSON.parse(JSON.stringify(ex.vals));s.ex=ex.id;
+ $('#solCtl').innerHTML=solControls();solRefresh();
+});
+
+document.addEventListener('click',function(e){
+ var el=e.target.closest&&e.target.closest('[data-act="solshow"]');if(!el||state.tab!=='sol')return;
+ state.solShow=!state.solShow;
+ var o=$('#solOut');if(o)o.innerHTML=solOutHTML(state.solCache?state.solCache.out:solCompute().out);
+ var b=$('[data-act="solshow"]');if(b)b.focus({preventScroll:true});
+});
+
+/* ---------- boot ---------- */
+function fullRender(){
+ var L=state.lang,t=T[L];
+ document.documentElement.lang=L==='kk'?'kk':'ru';
+ $('#bt').textContent=t.title;$('#bs').textContent=t.sub;
+ $$('.seg button[data-lang]').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.lang===L));});
+ applySize();
+ renderTabs();renderTheme();loadStrokes();renderView();renderPen();
+ requestAnimationFrame(sizeInk);
+}
+fullRender();
+if(window.ResizeObserver)new ResizeObserver(function(){sizeInk();}).observe($('#view'));
+window.addEventListener('resize',sizeInk);
+})();
+</script><script>
+/* subscript fallback: Unicode ₀-₉ -> real <sub>/<tspan> (fonts of some touch panels lack these glyphs) */
+(function(){
+var RE=/[₀-₉]+/, RG=/([₀-₉]+)/g, SV='http://www.w3.org/2000/svg';
+function dig(s){return s.replace(/[₀-₉]/g,function(c){return String.fromCharCode(c.charCodeAt(0)-0x2080+48);});}
+function inSvg(n){var p=n.parentNode;while(p&&p.nodeType===1){if(p.namespaceURI===SV)return true;p=p.parentNode;}return false;}
+function fix(t){
+ var par=t.parentNode;if(!par||!RE.test(t.nodeValue))return;
+ var tag=par.nodeName.toLowerCase();
+ if(tag==='script'||tag==='style'||tag==='textarea')return;
+ if(tag==='option'||tag==='title'){t.nodeValue=dig(t.nodeValue);return;}
+ var parts=t.nodeValue.split(RG),frag=document.createDocumentFragment(),svg=inSvg(t),i,sub;
+ for(i=0;i<parts.length;i++){
+  if(!parts[i])continue;
+  sub=(i%2===1);
+  if(svg){
+   var ts=document.createElementNS(SV,'tspan');
+   if(sub){ts.setAttribute('dy','0.28em');ts.setAttribute('font-size','72%');ts.textContent=dig(parts[i]);}
+   else{ts.textContent=parts[i];if(i>1)ts.setAttribute('dy','-0.28em');}
+   frag.appendChild(ts);
+  }else if(sub){var s=document.createElement('sub');s.className='sbx';s.textContent=dig(parts[i]);frag.appendChild(s);}
+  else frag.appendChild(document.createTextNode(parts[i]));
+ }
+ par.replaceChild(frag,t);
+}
+function walk(n){
+ if(n.nodeType===3){fix(n);return;}
+ if(n.nodeType!==1)return;
+ var w=document.createTreeWalker(n,NodeFilter.SHOW_TEXT,null),a=[],x;
+ while((x=w.nextNode()))if(RE.test(x.nodeValue))a.push(x);
+ a.forEach(fix);
+}
+var st=document.createElement('style');st.textContent='sub.sbx{font-size:.72em;line-height:0;vertical-align:baseline;position:relative;top:.28em}';document.head.appendChild(st);
+var busy=false;
+new MutationObserver(function(ms){
+ if(busy)return;busy=true;
+ ms.forEach(function(m){
+  if(m.type==='characterData')fix(m.target);
+  else m.addedNodes.forEach(walk);
+ });
+ busy=false;
+}).observe(document.body||document.documentElement,{childList:true,subtree:true,characterData:true});
+walk(document.body||document.documentElement);
+})();
+</script>
